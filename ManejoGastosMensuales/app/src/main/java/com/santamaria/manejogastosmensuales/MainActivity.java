@@ -14,6 +14,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setToolbar();
+
+        //usado para definir el icono en el toolbar
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+    }
+
+    private void setToolbar(){
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
     }
@@ -21,18 +28,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.exito_menu, menu);
+        getMenuInflater().inflate(R.menu.exit_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
 
-            case R.menu.exito_menu:
+            case R.id.exit_menu_item:
                 Toast.makeText(this, "Me has presionado, me saldré", Toast.LENGTH_SHORT).show();
                 return true;
 
