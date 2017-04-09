@@ -1,15 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.santamaria.manejogastosmensuales.Fragments.MainFragment">
+    tools:context=".Fragments.MainFragment">
 
+    <ListView
+        android:id="@+id/ListViewCategorias"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fragmento Principal"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_centerInParent="true" />
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fabAddCategory"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="16dp"
+    app:layout_behavior="com.santamaria.manejogastosmensuales.Behavior.ScrollFabBehavior"
+    android:src="@mipmap/ic_add_fab"/>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

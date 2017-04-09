@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
         //usado para definir el icono en el toolbar
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
+        //Select the second tab as default one.
+        tabLayout.getTabAt(1).select();
+
     }
 
     private void setToolbar(){
