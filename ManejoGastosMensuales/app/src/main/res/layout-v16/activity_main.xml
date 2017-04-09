@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:background="?attr/colorPrimary"
-        android:evelation="3dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         />
