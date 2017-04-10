@@ -6,16 +6,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.santamaria.manejogastosmensuales.Adapter.ListViewAdapter;
+import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
 
@@ -27,8 +26,9 @@ public class MainFragment extends Fragment {
 
     private FloatingActionButton fabAdd;
     List<Category> categoryList;
-    ListView listViewCategorias;
-    ListViewAdapter listViewAdapter;
+    RecyclerView recyclerViewCategorias;
+    RecyclerView.Adapter recyclerViewAdapter;
+    RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     public MainFragment() {
         // Required empty public constructor
@@ -40,7 +40,8 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
+        recyclerViewCategorias = (RecyclerView) view.findViewById(R.id.recyclerViewCategorias);
+        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
 
         categoryList = new LinkedList<>();
 
@@ -48,9 +49,17 @@ public class MainFragment extends Fragment {
         categoryList.add(new Category("Servicios", R.drawable.under_construct, (float) 0.0));
         categoryList.add(new Category("Comida", R.drawable.under_construct, (float) 0.0));
 
-        listViewAdapter = new ListViewAdapter(categoryList, getContext(), R.layout.cardview_item);
+        recyclerViewAdapter = new RecyclerViewAdapter(categoryList, R.layout.recycler_cardview_item, new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Category category, int position) {
 
-        listViewCategorias.setAdapter(listViewAdapter);
+                Toast.makeText(getActivity(), "Prueba 1,2,3, me escuchan?", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        recyclerViewCategorias.setLayoutManager(recyclerViewLayoutManager);
+        recyclerViewCategorias.setAdapter(recyclerViewAdapter);
 
         //fab action
         final FloatingActionButton fabAdd = (FloatingActionButton) view.findViewById(R.id.fabAddCategory);
@@ -61,6 +70,27 @@ public class MainFragment extends Fragment {
 
                 alertCreateCategory("Create new Category", "");
 
+            }
+        });
+
+        recyclerViewCategorias.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx,int dy){
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy >0) {
+                    // Scroll Down
+                    if (fabAdd.isShown()) {
+                        fabAdd.hide();
+                    }
+                }
+                else if (dy <0) {
+                    // Scroll Up
+                    if (!fabAdd.isShown()) {
+                        fabAdd.show();
+                    }
+                }
             }
         });
 
@@ -92,7 +122,7 @@ public class MainFragment extends Fragment {
 
                 if (!categoryName.isEmpty()) {
                     categoryList.add(new Category(categoryName, R.drawable.under_construct, (float) 0));
-                    listViewAdapter.notifyDataSetChanged();
+                    recyclerViewAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), "The name is required to create a new Category", Toast.LENGTH_SHORT).show();
                 }

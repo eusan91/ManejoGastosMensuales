@@ -3,6 +3,7 @@ package com.santamaria.manejogastosmensuales.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class LastMonthFragment extends Fragment {
         categoryList.add(new Category("Servicios", R.drawable.under_construct, (float) 200.0));
         categoryList.add(new Category("Comida", R.drawable.under_construct, (float) 300.0));
 
-        listViewAdapter = new ListViewAdapter(categoryList, getContext(), R.layout.cardview_item);
+        listViewAdapter = new ListViewAdapter(categoryList, getContext(), R.layout.listview_cardview_item);
 
         listViewCategorias.setAdapter(listViewAdapter);
 

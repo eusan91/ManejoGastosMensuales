@@ -1,15 +1,14 @@
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MainFragment">
+    tools:context=".Fragments.LastMonthFragment">
 
     <ListView
         android:id="@+id/ListViewCategorias"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"/>
+        android:divider="@null"/>
 
-
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

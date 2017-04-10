@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.MainFragment">
 
-    <ListView
-        android:id="@+id/ListViewCategorias"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewCategorias"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"/>
+        android:layout_height="match_parent"/>
 
 <android.support.design.widget.FloatingActionButton
     android:id="@+id/fabAddCategory"
@@ -18,7 +17,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
     android:layout_margin="16dp"
-    app:layout_behavior="com.santamaria.manejogastosmensuales.Behavior.ScrollFabBehavior"
     android:src="@mipmap/ic_add_fab"/>
 
 </android.support.design.widget.CoordinatorLayout>
