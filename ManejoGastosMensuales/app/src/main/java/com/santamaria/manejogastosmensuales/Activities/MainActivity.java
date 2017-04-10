@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.exit_menu_item:
                 Toast.makeText(this, "Me has presionado, me saldré", Toast.LENGTH_SHORT).show();
+                this.finish();
                 return true;
 
             default:
