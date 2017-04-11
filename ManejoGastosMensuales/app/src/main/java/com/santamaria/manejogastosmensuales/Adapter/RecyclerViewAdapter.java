@@ -21,6 +21,7 @@ import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -99,6 +100,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Picasso.with(imageView.getContext()).load(currentPictureObject.toString()).fit().into(imageView);
                 } else {
                     //create a file
+                    File image = new File(currPicture);
+                    Picasso.with(imageView.getContext()).load(image).fit().into(imageView);
                 }
 
             } else if (currentPictureObject instanceof Integer) {
