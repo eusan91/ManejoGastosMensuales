@@ -6,17 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.MainFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewCategorias"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!--
+           android:paddingBottom="70dp"
+       android:clipToPadding="false"
+
+       needed to add the padding to the last item
+       in the recyclerview.
+
+    -->
+
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/recyclerViewCategorias"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:paddingBottom="70dp"
+       android:clipToPadding="false"/>
 
 <android.support.design.widget.FloatingActionButton
-    android:id="@+id/fabAddCategory"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="16dp"
-    android:src="@mipmap/ic_add_fab"/>
+   android:id="@+id/fabAddCategory"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:layout_gravity="bottom|end"
+   android:layout_margin="16dp"
+   android:src="@mipmap/ic_add_fab"/>
 
 </android.support.design.widget.CoordinatorLayout>
