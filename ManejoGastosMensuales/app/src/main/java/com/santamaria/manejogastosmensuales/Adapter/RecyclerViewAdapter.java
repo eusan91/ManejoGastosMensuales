@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private int layout;
     private OnItemClickListener onItemClickListener;
     private Context context;
-    MenuInflater menuInflater;
+    private MenuInflater menuInflater;
 
     public RecyclerViewAdapter(List<Category> categoryList, int layout, OnItemClickListener onItemClickListener, MenuInflater menuInflater) {
         this.categoryList = categoryList;
@@ -69,7 +69,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
         private TextView categoryName;
         private TextView total;
@@ -124,26 +124,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             menu.setHeaderTitle(categoryList.get(this.getAdapterPosition()).getNombre());
+            menu.setHeaderIcon(R.mipmap.ic_create_category);
+
             menuInflater.inflate(R.menu.options_card_view_context_menu, menu);
 
-            MenuItem.OnMenuItemClickListener list = new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-
-                    switch (item.getItemId()) {
-                        case R.id.editCardView:
-                            return true;
-                        case R.id.deleteCardView:
-                            removeCategory(getAdapterPosition());
-                            return true;
-                    }
-
-                    return true;
-                }
-            };
-
             for (int i = 0, n = menu.size(); i < n; i++)
-                menu.getItem(i).setOnMenuItemClickListener(list);
+                menu.getItem(i).setOnMenuItemClickListener(this);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+
+            switch (item.getItemId()) {
+                case R.id.editCardView:
+                    return true;
+                case R.id.deleteCardView:
+                    removeCategory(getAdapterPosition());
+                    return true;
+                default:
+                    return false;
+            }
+
         }
     }
 
