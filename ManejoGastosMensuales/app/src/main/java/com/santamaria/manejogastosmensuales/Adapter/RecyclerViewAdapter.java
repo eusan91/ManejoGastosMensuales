@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.Adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -106,6 +107,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             } else if (currentPictureObject instanceof Integer) {
                 Picasso.with(imageView.getContext()).load((int) currentPictureObject).fit().into(imageView);
+            } else if (currentPictureObject instanceof Uri){
+                Uri image = (Uri) currentPictureObject;
+                Picasso.with(imageView.getContext()).load(image).fit().into(imageView);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
