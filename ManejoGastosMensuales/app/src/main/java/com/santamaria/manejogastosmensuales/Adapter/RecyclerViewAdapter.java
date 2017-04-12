@@ -144,7 +144,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 default:
                     return false;
             }
-
         }
     }
 

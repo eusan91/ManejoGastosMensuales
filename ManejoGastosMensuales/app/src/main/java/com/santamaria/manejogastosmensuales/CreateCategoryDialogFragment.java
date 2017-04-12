@@ -38,8 +38,10 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
 
     private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_GALLERY = 2;
 
     private static final int CAMERA_WRITE_PERMISSION = 100;
+
 
     private Uri mediaUri;
 
@@ -136,8 +138,23 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
             takePicture();
         } else if (view.getId() == R.id.imageViewGallery) {
             Toast.makeText(getActivity(), "Abrir Galeria", Toast.LENGTH_SHORT).show();
+            selectPictureFromGallery();
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK){
+
+            if (requestCode == REQUEST_GALLERY){
+
+                mediaUri = data.getData();
+
+            }
+        }
     }
 
     //------------------------------- Logic to take pictures ----------------------------------
@@ -246,4 +263,17 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
             return false;
         }
     }
+
+
+    //------------------------------- Logic select pictures from gallery ----------------------------------
+
+
+    private void selectPictureFromGallery() {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_GALLERY);
+
+    }
+
 }
