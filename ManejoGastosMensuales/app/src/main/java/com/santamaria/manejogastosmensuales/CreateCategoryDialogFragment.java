@@ -2,9 +2,11 @@ package com.santamaria.manejogastosmensuales;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.santamaria.manejogastosmensuales.Domain.Category;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -78,17 +82,19 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
                 String categoryName = categoryNameInput.getText().toString().trim();
 
+                Object url;
                 if (!categoryName.isEmpty()) {
 
-                    Object url;
                     if (mediaUri != null) {
+
                         url = mediaUri.getPath();
                     } else {
                         url = R.drawable.under_construct;
                     }
-
+                    Log.d("ema", mediaUri.toString());
+                    Toast.makeText(getActivity(), mediaUri.toString(), Toast.LENGTH_LONG).show();
                     //return bundle
-                    Category category = new Category(categoryName, mediaUri, (float) 0);
+                    Category category = new Category(categoryName, url, (float) 0);
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("Category", category);
@@ -137,7 +143,6 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
         if (view.getId() == R.id.imageViewCamera) {
             takePicture();
         } else if (view.getId() == R.id.imageViewGallery) {
-            Toast.makeText(getActivity(), "Abrir Galeria", Toast.LENGTH_SHORT).show();
             selectPictureFromGallery();
         }
 
@@ -153,7 +158,13 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
                 mediaUri = data.getData();
 
+            } else if (requestCode == REQUEST_CAMERA){
+
+                mediaUri = data.getData();
+
             }
+            
+            
         }
     }
 
