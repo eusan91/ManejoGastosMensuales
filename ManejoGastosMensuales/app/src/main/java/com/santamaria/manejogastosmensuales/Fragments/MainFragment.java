@@ -20,22 +20,26 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
-import com.santamaria.manejogastosmensuales.CreateCategoryDialogFragment;
+import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
 
-import java.util.LinkedList;
-import java.util.List;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener, RealmChangeListener<RealmResults<Category>> {
 
     private static final int RESULT_CREATE_CATEGORY_DIALOG = 100;
 
     private FloatingActionButton fabAdd;
-    List<Category> categoryList;
     RecyclerView recyclerViewCategories;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
+
+    private RealmResults<Category> categories;
+
+    private Realm realm;
 
     public MainFragment() {
         // Required empty public constructor
@@ -45,18 +49,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        realm = Realm.getDefaultInstance();
+
+        categories = realm.where(Category.class).findAll();
+
+        categories.addChangeListener(this);
+
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         recyclerViewCategories = (RecyclerView) view.findViewById(R.id.recyclerViewCategorias);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
 
-        categoryList = new LinkedList<>();
-
-        categoryList.add(new Category("Gasolina", R.drawable.under_construct, (float) 0.0));
-        categoryList.add(new Category("Servicios", R.drawable.under_construct, (float) 0.0));
-        categoryList.add(new Category("Comida", R.drawable.under_construct, (float) 0.0));
-
-        recyclerViewAdapter = new RecyclerViewAdapter(categoryList, R.layout.recycler_cardview_item,
+        recyclerViewAdapter = new RecyclerViewAdapter(categories, R.layout.recycler_cardview_item,
                 new RecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Category category, int position) {
@@ -123,9 +127,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.editCardView:
                 Toast.makeText(getActivity(), "El Item a editar es: " + info.position, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.deleteCardView:
-                removeCategory(info.position);
-                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -133,17 +134,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void addNewCategory(Category category) {
 
-        int position = categoryList.size();
-        categoryList.add(category);
-        recyclerViewAdapter.notifyItemInserted(position);
-        recyclerViewLayoutManager.scrollToPosition(position);
-
-    }
-
-    private void removeCategory(int position) {
-
-        categoryList.remove(position);
-        recyclerViewAdapter.notifyItemRemoved(position);
+        realm.beginTransaction();
+        realm.copyToRealm(category);
+        realm.commitTransaction();
 
     }
 
@@ -152,9 +145,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if (view.getId() == R.id.fabAddCategory) {
 
-            CreateCategoryDialogFragment createCategoryDialogFragment = new CreateCategoryDialogFragment();
-            createCategoryDialogFragment.setTargetFragment(this, RESULT_CREATE_CATEGORY_DIALOG);
-            createCategoryDialogFragment.show(getFragmentManager(), "createCategoryDialogFragment");
+            CategoryDialogFragment categoryDialogFragment = new CategoryDialogFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("title", "Create new Category");
+            categoryDialogFragment.setArguments(bundle);
+
+            categoryDialogFragment.setTargetFragment(this, RESULT_CREATE_CATEGORY_DIALOG);
+            categoryDialogFragment.show(getFragmentManager(), "categoryDialogFragment");
         }
     }
 
@@ -176,4 +174,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onChange(RealmResults<Category> element) {
+        recyclerViewAdapter.notifyDataSetChanged();
+        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount()-1);
+    }
 }

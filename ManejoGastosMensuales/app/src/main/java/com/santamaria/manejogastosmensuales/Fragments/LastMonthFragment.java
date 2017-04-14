@@ -36,9 +36,9 @@ public class LastMonthFragment extends Fragment {
 
         categoryList = new LinkedList<>();
 
-        categoryList.add(new Category("Gasolina", R.drawable.under_construct, (float) 100.0));
-        categoryList.add(new Category("Servicios", R.drawable.under_construct, (float) 200.0));
-        categoryList.add(new Category("Comida", R.drawable.under_construct, (float) 300.0));
+        categoryList.add(new Category("Gasolina", "", (float) 100.0));
+        categoryList.add(new Category("Servicios", "", (float) 200.0));
+        categoryList.add(new Category("Comida", "", (float) 300.0));
 
         listViewAdapter = new ListViewAdapter(categoryList, getContext(), R.layout.listview_cardview_item);
 

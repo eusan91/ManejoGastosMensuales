@@ -25,11 +25,15 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+
 /**
  * Created by santamae on 4/10/2017.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements RealmChangeListener<RealmResults<Category>> {
 
     private List<Category> categoryList;
     private int layout;
@@ -37,11 +41,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private MenuInflater menuInflater;
 
+    private Realm realm;
+
     public RecyclerViewAdapter(List<Category> categoryList, int layout, OnItemClickListener onItemClickListener, MenuInflater menuInflater) {
         this.categoryList = categoryList;
         this.layout = layout;
         this.onItemClickListener = onItemClickListener;
         this.menuInflater = menuInflater;
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -69,6 +76,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return 0;
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
         private TextView categoryName;
@@ -91,25 +100,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.categoryName.setText(category.getNombre());
             this.total.setText(category.getTotal() + "");
 
-            Object currentPictureObject = category.getPicture();
+            String currentPictureObject = category.getPicture();
 
-            if (currentPictureObject instanceof String) {
-                String currPicture = currentPictureObject.toString();
-
-                if (currPicture.contains("http")) {
-                    //url
-                    Picasso.with(imageView.getContext()).load(currentPictureObject.toString()).fit().into(imageView);
-                } else {
-                    //create a file
-                    File image = new File(currPicture);
-                    Picasso.with(imageView.getContext()).load(image).fit().into(imageView);
-                }
-
-            } else if (currentPictureObject instanceof Integer) {
-                Picasso.with(imageView.getContext()).load((int) currentPictureObject).fit().into(imageView);
-            } else if (currentPictureObject instanceof Uri){
-                Uri image = (Uri) currentPictureObject;
-                Picasso.with(imageView.getContext()).load(image).fit().into(imageView);
+            if (currentPictureObject.isEmpty()){
+                Picasso.with(imageView.getContext()).load(R.drawable.under_construct).fit().into(imageView);
+            } else {
+                Picasso.with(imageView.getContext()).load(Uri.parse(currentPictureObject)).fit().into(imageView);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +135,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 case R.id.editCardView:
                     return true;
                 case R.id.deleteCardView:
-                    removeCategory(getAdapterPosition());
+                    removeCategory(categoryList.get(getAdapterPosition()));
                     return true;
                 default:
                     return false;
@@ -147,13 +143,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    private void removeCategory(int position) {
+    private void removeCategory(Category category) {
 
-        categoryList.remove(position);
-        this.notifyItemRemoved(position);
+        realm.beginTransaction();
+        category.deleteFromRealm();
+        realm.commitTransaction();
     }
 
     public interface OnItemClickListener {
         void onItemClick(Category category, int position);
+    }
+
+    @Override
+    public void onChange(RealmResults<Category> element) {
+        this.notifyDataSetChanged();
     }
 }

@@ -2,11 +2,9 @@ package com.santamaria.manejogastosmensuales;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -21,7 +19,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -30,7 +27,6 @@ import com.santamaria.manejogastosmensuales.Domain.Category;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,13 +34,15 @@ import java.util.Date;
  * Created by Santamaria on 12/04/2017.
  */
 
-public class CreateCategoryDialogFragment extends DialogFragment implements View.OnClickListener {
+public class CategoryDialogFragment extends DialogFragment implements View.OnClickListener {
 
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
 
     private static final int CAMERA_WRITE_PERMISSION = 100;
+    private String title;
+    private Category category;
 
 
     private Uri mediaUri;
@@ -52,6 +50,20 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null){
+
+            if (!bundle.getString("title").isEmpty()) {
+                title =bundle.getString("title");
+            }
+
+            if (bundle.getParcelable("category") != null) {
+                category = bundle.getParcelable("category");
+            }
+
+        }
 
         if (savedInstanceState != null) {
             mediaUri = (Uri) savedInstanceState.getParcelable("mediaUri");
@@ -64,7 +76,7 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Create new Category");
+        builder.setTitle(title);
 
         View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_category, null);
         builder.setView(viewInflated);
@@ -82,19 +94,15 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
                 String categoryName = categoryNameInput.getText().toString().trim();
 
-                Object url;
+                String url = "";
                 if (!categoryName.isEmpty()) {
 
                     if (mediaUri != null) {
 
-                        url = mediaUri.getPath();
-                    } else {
-                        url = R.drawable.under_construct;
+                        url = mediaUri.toString();
                     }
-                    Log.d("ema", mediaUri.toString());
-                    Toast.makeText(getActivity(), mediaUri.toString(), Toast.LENGTH_LONG).show();
                     //return bundle
-                    Category category = new Category(categoryName, url, (float) 0);
+                    Category category = new Category(categoryName, url);
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("Category", category);
@@ -160,8 +168,9 @@ public class CreateCategoryDialogFragment extends DialogFragment implements View
 
             } else if (requestCode == REQUEST_CAMERA){
 
-                mediaUri = data.getData();
-
+                if (data != null) {
+                    mediaUri = data.getData();
+                }
             }
             
             
