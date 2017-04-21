@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.santamaria.manejogastosmensuales.Activities.CategoryDetailed;
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
@@ -65,7 +66,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
                     @Override
                     public void onItemClick(Category category, int position) {
 
-                        Toast.makeText(getActivity(), "Prueba 1,2,3, me escuchan?", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), CategoryDetailed.class);
+                        startActivity(intent);
 
                     }
                 }, getActivity().getMenuInflater());

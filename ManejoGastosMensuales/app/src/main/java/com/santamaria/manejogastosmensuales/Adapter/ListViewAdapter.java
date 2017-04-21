@@ -83,11 +83,6 @@ public class ListViewAdapter extends BaseAdapter {
         } else if (currentPictureObject instanceof Integer){
             Picasso.with(context).load((int) currentPictureObject).fit().into(holder.imageView);
         }
-
-
-
-
-
         holder.categoryName.setText(currentCategoryName);
         holder.total.setText(currentTotal+"");
 
