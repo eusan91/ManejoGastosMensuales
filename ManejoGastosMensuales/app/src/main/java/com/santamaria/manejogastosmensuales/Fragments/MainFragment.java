@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.santamaria.manejogastosmensuales.Activities.CategoryDefined;
 import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
@@ -34,6 +35,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
     RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private RealmResults<Category> categories;
+    private RealmResults<CategoryDefined> categoryDefineds;
 
     private Realm realm;
 
@@ -48,6 +50,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         realm = Realm.getDefaultInstance();
 
         categories = realm.where(Category.class).findAll();
+
+        if (categories.isEmpty()){
+            categoryDefineds = realm.where(CategoryDefined.class).findAll();
+
+            if (!categoryDefineds.isEmpty()){
+
+                for (CategoryDefined categoryDefined: categoryDefineds) {
+                    addNewCategory(new Category(categoryDefined.getCategoryName()));
+                }
+            }
+        }
 
         categories.addChangeListener(this);
 
