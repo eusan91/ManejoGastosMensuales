@@ -2,4 +2,6 @@
     <string name="app_name">Manejo Gastos Mensuales</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_define_categories">DefineCategoriesActivity</string>
 </resources>
