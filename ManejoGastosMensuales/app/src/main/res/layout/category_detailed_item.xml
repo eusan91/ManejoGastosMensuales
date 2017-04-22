@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="7dp">
 
         <LinearLayout
@@ -35,7 +36,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:layout_marginTop="7dp">
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal"
+            android:gravity="end">
 
             <TextView
                 android:id="@+id/currency"
@@ -48,9 +51,7 @@
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:hint="10000000000"
-                android:textAlignment="textStart"
-                android:layout_gravity="start"/>
+                android:hint="100000"/>
 
         </LinearLayout>
 
