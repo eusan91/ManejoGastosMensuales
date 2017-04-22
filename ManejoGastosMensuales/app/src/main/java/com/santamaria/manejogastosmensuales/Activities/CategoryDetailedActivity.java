@@ -26,7 +26,8 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 
-public class CategoryDetailedActivity extends AppCompatActivity implements View.OnClickListener, RealmChangeListener<Category> {
+public class CategoryDetailedActivity extends AppCompatActivity implements View.OnClickListener,
+        RealmChangeListener<Category> {
 
     private static final int DETAIL_CREATION = 100;
     private static final int DETAIL_EDITION = 101;

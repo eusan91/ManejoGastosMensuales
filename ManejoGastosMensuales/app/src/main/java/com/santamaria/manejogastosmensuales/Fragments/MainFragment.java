@@ -14,7 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.santamaria.manejogastosmensuales.Activities.CategoryDefined;
+import com.santamaria.manejogastosmensuales.Activities.MainActivity;
+import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
 import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
@@ -25,7 +26,8 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-public class MainFragment extends Fragment implements View.OnClickListener, RealmChangeListener<RealmResults<Category>> {
+public class MainFragment extends Fragment implements View.OnClickListener,
+        RealmChangeListener<RealmResults<Category>> {
 
     private static final int RESULT_CREATE_CATEGORY_DIALOG = 100;
 
@@ -35,7 +37,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
     RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private RealmResults<Category> categories;
-    private RealmResults<CategoryDefined> categoryDefineds;
 
     private Realm realm;
 
@@ -52,11 +53,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         categories = realm.where(Category.class).findAll();
 
         if (categories.isEmpty()){
-            categoryDefineds = realm.where(CategoryDefined.class).findAll();
 
-            if (!categoryDefineds.isEmpty()){
+            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()){
 
-                for (CategoryDefined categoryDefined: categoryDefineds) {
+                for (CategoryDefined categoryDefined: MainActivity.settingsData.getCategoryDefinedList()) {
                     addNewCategory(new Category(categoryDefined.getCategoryName()));
                 }
             }
@@ -124,6 +124,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         realm.beginTransaction();
         realm.copyToRealm(category);
         realm.commitTransaction();
+        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount()-1);
 
     }
 
@@ -184,7 +185,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
     @Override
     public void onChange(RealmResults<Category> element) {
         recyclerViewAdapter.notifyDataSetChanged();
-        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount()-1);
     }
 
     @Override
@@ -192,14 +192,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         super.onResume();
 
         if (categories.isEmpty()){
-            categoryDefineds = realm.where(CategoryDefined.class).findAll();
 
-            if (!categoryDefineds.isEmpty()){
+            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()){
 
-                for (CategoryDefined categoryDefined: categoryDefineds) {
+                for (CategoryDefined categoryDefined: MainActivity.settingsData.getCategoryDefinedList()) {
                     addNewCategory(new Category(categoryDefined.getCategoryName()));
                 }
             }
         }
+
     }
 }

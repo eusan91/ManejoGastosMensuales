@@ -3,37 +3,35 @@ package com.santamaria.manejogastosmensuales.Activities;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.CategoryDefinedAdapter;
-import com.santamaria.manejogastosmensuales.Domain.Category;
+import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
+import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
 
-import java.util.List;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 
-public class DefineCategoriesActivity extends AppCompatActivity implements RealmChangeListener<RealmResults<CategoryDefined>> {
+public class DefineCategoriesActivity extends AppCompatActivity
+        implements RealmChangeListener<SettingsData> {
 
     private EditText categoryNameInput = null;
     private ListView listView;
-    private RealmResults<CategoryDefined> categoryDefinedRealmResults;
+    private RealmList<CategoryDefined> categoryDefinedRealmList;
     private CategoryDefinedAdapter adapter;
     private Realm realm;
+    private SettingsData settingsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +41,15 @@ public class DefineCategoriesActivity extends AppCompatActivity implements Realm
         setTitle("Define category list");
 
         realm = Realm.getDefaultInstance();
-        categoryDefinedRealmResults = realm.where(CategoryDefined.class).findAll();
-        categoryDefinedRealmResults.addChangeListener(this);
+        settingsData = MainActivity.settingsData;
+        categoryDefinedRealmList = settingsData.getCategoryDefinedList();
+        settingsData.addChangeListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.listviewDefineCategories);
-        adapter = new CategoryDefinedAdapter(this, categoryDefinedRealmResults, R.layout.listview_category_defined_item);
+        adapter = new CategoryDefinedAdapter(this, categoryDefinedRealmList, R.layout.listview_category_defined_item);
         listView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,6 +62,10 @@ public class DefineCategoriesActivity extends AppCompatActivity implements Realm
 
             }
         });
+
+
+        //usado para definir el icono en el toolbar
+        getSupportActionBar().setIcon(R.drawable.ic_create_categories_dark);
     }
 
     private void createAlertDialog() {
@@ -100,14 +104,15 @@ public class DefineCategoriesActivity extends AppCompatActivity implements Realm
     private void addNewCategory(String categoryName) {
 
         realm.beginTransaction();
-        realm.copyToRealm(new CategoryDefined(categoryName));
+        CategoryDefined categoryDefined = new CategoryDefined(categoryName);
+        realm.copyToRealm(categoryDefined);
+        settingsData.getCategoryDefinedList().add(categoryDefined);
         realm.commitTransaction();
-
 
     }
 
     @Override
-    public void onChange(RealmResults<CategoryDefined> element) {
+    public void onChange(SettingsData element) {
         adapter.notifyDataSetChanged();
     }
 }

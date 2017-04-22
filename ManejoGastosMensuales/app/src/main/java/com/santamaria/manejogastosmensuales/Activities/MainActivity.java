@@ -1,5 +1,6 @@
 package com.santamaria.manejogastosmensuales.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -7,35 +8,52 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.PagerAdapter;
+import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        RealmChangeListener<SettingsData> {
 
     private Toolbar myToolbar = null;
     private TabLayout tabLayout = null;
     private ViewPager viewPager = null;
     private DrawerLayout drawerLayout = null;
     private NavigationView navigationView = null;
+    private NumberPicker startMonthPicker = null;
+
+    public static SettingsData settingsData;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        realm = Realm.getDefaultInstance();
+
+        //load settings
+        loadSettings();
+        Toast.makeText(this, settingsData.getStartMonth()+"", Toast.LENGTH_SHORT).show();
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.navView);
-
         navigationView.setNavigationItemSelectedListener(this);
 
         setToolbar();
@@ -43,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setViewPager();
 
         //usado para definir el icono en el toolbar
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //habilitar el icono
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
@@ -51,7 +69,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Select the second tab as default one.
         tabLayout.getTabAt(1).select();
+    }
 
+    private void loadSettings() {
+
+        settingsData = realm.where(SettingsData.class).findFirst();
     }
 
     private void setToolbar(){
@@ -130,21 +152,75 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.defineCategories:
                 closeNavDrawer = true;
                 Intent intent = new Intent(this, DefineCategoriesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS|Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 break;
 
             case  R.id.startMonth:
                 closeNavDrawer = true;
-
+                createAlertDialog();
                 break;
         }
 
         if (closeNavDrawer){
-
-            item.setChecked(true);
             drawerLayout.closeDrawers();
         }
 
         return closeNavDrawer;
     }
+
+    private void createAlertDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Start of Month");
+        builder.setIcon(R.drawable.ic_start_month);
+        builder.setMessage("Define the day the app will reset data for new month:");
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_start_month_item, null);
+        builder.setView(viewInflated);
+
+        startMonthPicker = (NumberPicker) viewInflated.findViewById(R.id.NumberPickerDay);
+        startMonthPicker.setMinValue(1);
+        startMonthPicker.setMaxValue(31);
+
+        builder.setPositiveButton("SET", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                int value = startMonthPicker.getValue();
+                setStartOfMonth(value);
+
+                navigationView.setCheckedItem(R.id.menu_none);
+
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //no action required
+                navigationView.setCheckedItem(R.id.menu_none);
+            }
+        });
+
+        builder.create().show();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        navigationView.setCheckedItem(R.id.menu_none);
+    }
+
+    private void setStartOfMonth(int value){
+
+        realm.beginTransaction();
+        settingsData.setStartMonth(value);
+        realm.copyToRealmOrUpdate(settingsData);
+        realm.commitTransaction();
+
+    }
+
+    @Override
+    public void onChange(SettingsData element) {}
 }

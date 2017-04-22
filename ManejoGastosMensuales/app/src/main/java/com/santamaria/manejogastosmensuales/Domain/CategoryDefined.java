@@ -1,6 +1,9 @@
-package com.santamaria.manejogastosmensuales.Activities;
+package com.santamaria.manejogastosmensuales.Domain;
+
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Santamaria on 22/04/2017.
@@ -8,9 +11,12 @@ import io.realm.RealmObject;
 
 public class CategoryDefined  extends RealmObject {
 
+    @PrimaryKey
+    private int id;
     private String categoryName;
 
     public CategoryDefined(String categoryName) {
+        this.id = MyApplication.CategoryDetailID.incrementAndGet();
         this.categoryName = categoryName;
     }
 

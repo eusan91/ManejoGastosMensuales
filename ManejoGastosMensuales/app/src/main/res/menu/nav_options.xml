@@ -12,5 +12,10 @@
             android:id="@+id/startMonth"
             android:icon="@drawable/ic_start_month"
             android:title="Define start of Month"/>
+
+        <item
+            android:id="@+id/menu_none"
+            android:title=""
+            android:visible="false"/>
     </group>
 </menu>
