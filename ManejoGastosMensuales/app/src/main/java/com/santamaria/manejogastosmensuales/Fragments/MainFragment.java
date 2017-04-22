@@ -186,4 +186,20 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         recyclerViewAdapter.notifyDataSetChanged();
         recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount()-1);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (categories.isEmpty()){
+            categoryDefineds = realm.where(CategoryDefined.class).findAll();
+
+            if (!categoryDefineds.isEmpty()){
+
+                for (CategoryDefined categoryDefined: categoryDefineds) {
+                    addNewCategory(new Category(categoryDefined.getCategoryName()));
+                }
+            }
+        }
+    }
 }
