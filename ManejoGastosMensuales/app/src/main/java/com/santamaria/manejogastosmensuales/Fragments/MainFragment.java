@@ -67,6 +67,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
                     public void onItemClick(Category category, int position) {
 
                         Intent intent = new Intent(getContext(), CategoryDetailed.class);
+                        intent.putExtra("categoryID", categories.get(position).getId());
                         startActivity(intent);
 
                     }
