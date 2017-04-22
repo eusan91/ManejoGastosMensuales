@@ -10,16 +10,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
-import com.santamaria.manejogastosmensuales.Activities.CategoryDetailed;
+import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
@@ -66,7 +61,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
                     @Override
                     public void onItemClick(Category category, int position) {
 
-                        Intent intent = new Intent(getContext(), CategoryDetailed.class);
+                        Intent intent = new Intent(getContext(), CategoryDetailedActivity.class);
                         intent.putExtra("categoryID", categories.get(position).getId());
                         startActivity(intent);
 

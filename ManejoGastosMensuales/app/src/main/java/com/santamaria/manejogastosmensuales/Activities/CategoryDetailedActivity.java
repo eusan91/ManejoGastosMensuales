@@ -5,8 +5,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +26,10 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 
-public class CategoryDetailed extends AppCompatActivity implements View.OnClickListener, RealmChangeListener<Category> {
+public class CategoryDetailedActivity extends AppCompatActivity implements View.OnClickListener, RealmChangeListener<Category> {
 
+    private static final int DETAIL_CREATION = 100;
+    private static final int DETAIL_EDITION = 101;
     private ListView listViewDetail;
     private Toolbar myToolbar = null;
     private CategoryDetailedAdapter adapter;
@@ -40,6 +45,7 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
     private int categoryID;
     private Realm realm;
     private Category category;
+    private CategoryDetail categoryDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
         listViewDetail = (ListView) findViewById(R.id.listViewDetail);
 
         Intent intent = getIntent();
-        categoryID = intent.getIntExtra("categoryID",-1);
+        categoryID = intent.getIntExtra("categoryID", -1);
 
         if (categoryID >= 0) {
             realm = Realm.getDefaultInstance();
@@ -71,16 +77,22 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
             finish();
         }
 
+        registerForContextMenu(listViewDetail);
+
     }
 
-    private void setToolbar(){
+    private void setToolbar() {
         setSupportActionBar(myToolbar);
     }
 
     public void fabAddNewDetail(View view) {
 
+        createAlertDialog(DETAIL_CREATION);
+
+    }
+
+    private void createAlertDialog(int alertType) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Create new category detail");
 
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_detail, null);
         builder.setView(viewInflated);
@@ -89,27 +101,56 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
         amountInput = (EditText) viewInflated.findViewById(R.id.newAmount);
         okButton = (TextView) viewInflated.findViewById(R.id.okButton);
         okButton.setOnClickListener(this);
+        okButton.setTag(alertType); // --> this way we can identify what to do in the button action
+
         cancelButton = (TextView) viewInflated.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
 
+
+        if (alertType == DETAIL_CREATION) {
+            builder.setTitle("Create new category detail");
+        } else {
+            builder.setTitle("Edit category detail");
+            detailInput.setText(categoryDetail.getDetail());
+            amountInput.setText(categoryDetail.getAmount() + "");
+        }
+
         alertDialog = builder.create();
         alertDialog.show();
-
     }
-
 
     private void addNewCategoryDetail(CategoryDetail categoryDetail) {
 
         realm.beginTransaction();
         realm.copyToRealm(categoryDetail);
         category.getCategoryDetailList().add(categoryDetail);
-        category.setTotal(category.getTotal()+categoryDetail.getAmount());
+        category.setTotal(category.getTotal() + categoryDetail.getAmount());
+        realm.commitTransaction();
+    }
+
+    private void deleteCategoryDetail(CategoryDetail categoryDetail) {
+
+        realm.beginTransaction();
+        category.setTotal(category.getTotal() - categoryDetail.getAmount());
+        categoryDetail.deleteFromRealm();
+        realm.commitTransaction();
+    }
+
+    private void editCategoryDetail(CategoryDetail categoryDetail, String detail, float amount) {
+
+        realm.beginTransaction();
+        category.setTotal((category.getTotal() - categoryDetail.getAmount()) + amount);
+        categoryDetail.setDetail(detail);
+        categoryDetail.setAmount(amount);
+        realm.copyToRealmOrUpdate(categoryDetail);
         realm.commitTransaction();
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.okButton) {
+
+            int alertType = (Integer) okButton.getTag();
 
             String detail = detailInput.getText().toString().trim();
 
@@ -126,10 +167,15 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
                 } else {
 
                     float amountF = Float.parseFloat(amount);
+                    if (alertType == DETAIL_CREATION) {
+                        CategoryDetail categoryDetail = new CategoryDetail(detail, amountF);
+                        addNewCategoryDetail(categoryDetail);
+                        alertDialog.dismiss();
+                    } else {
+                        editCategoryDetail(categoryDetail, detail, amountF);
+                        alertDialog.dismiss();
 
-                    CategoryDetail categoryDetail = new CategoryDetail(detail, amountF);
-                    addNewCategoryDetail(categoryDetail);
-                    alertDialog.dismiss();
+                    }
 
                 }
             }
@@ -137,10 +183,45 @@ public class CategoryDetailed extends AppCompatActivity implements View.OnClickL
         } else if (view.getId() == R.id.cancelButton){
             alertDialog.dismiss();
         }
+
     }
 
     @Override
     public void onChange(Category element) {
         adapter.notifyDataSetChanged();
     }
+
+
+//ContextMenu
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+        menu.setHeaderTitle(categoryDetailList.get(info.position).getDetail());
+        getMenuInflater().inflate(R.menu.options_category_detailed_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.deleteDetail:
+                deleteCategoryDetail(categoryDetailList.get(info.position));
+                return true;
+            case R.id.editDetail:
+                categoryDetail = categoryDetailList.get(info.position);
+                createAlertDialog(DETAIL_EDITION);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+
+        }
+    }
+
+    //End Context Menu
 }
