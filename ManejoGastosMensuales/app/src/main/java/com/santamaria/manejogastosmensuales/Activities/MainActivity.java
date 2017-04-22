@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //load settings
         loadSettings();
-        Toast.makeText(this, settingsData.getStartMonth()+"", Toast.LENGTH_SHORT).show();
+
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -183,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startMonthPicker = (NumberPicker) viewInflated.findViewById(R.id.NumberPickerDay);
         startMonthPicker.setMinValue(1);
         startMonthPicker.setMaxValue(31);
+        startMonthPicker.setValue(settingsData.getStartMonth());
+
 
         builder.setPositiveButton("SET", new DialogInterface.OnClickListener() {
             @Override
