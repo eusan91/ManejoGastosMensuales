@@ -1,7 +1,10 @@
 package com.santamaria.manejogastosmensuales.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
 import com.squareup.picasso.Picasso;
@@ -35,20 +39,24 @@ import io.realm.RealmResults;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements RealmChangeListener<RealmResults<Category>> {
 
+    public static final int RESULT_EDIT_CATEGORY_DIALOG = 200;
+
     private List<Category> categoryList;
     private int layout;
     private OnItemClickListener onItemClickListener;
     private Context context;
     private MenuInflater menuInflater;
+    private Fragment fragment;
 
     private Realm realm;
 
-    public RecyclerViewAdapter(List<Category> categoryList, int layout, OnItemClickListener onItemClickListener, MenuInflater menuInflater) {
+    public RecyclerViewAdapter(List<Category> categoryList, int layout, OnItemClickListener onItemClickListener, MenuInflater menuInflater, Fragment fragment) {
         this.categoryList = categoryList;
         this.layout = layout;
         this.onItemClickListener = onItemClickListener;
         this.menuInflater = menuInflater;
         realm = Realm.getDefaultInstance();
+        this.fragment = fragment;
     }
 
     @Override
@@ -133,6 +141,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             switch (item.getItemId()) {
                 case R.id.editCardView:
+                    editCategory(categoryList.get(getAdapterPosition()));
                     return true;
                 case R.id.deleteCardView:
                     removeCategory(categoryList.get(getAdapterPosition()));
@@ -141,6 +150,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     return false;
             }
         }
+    }
+
+    private void editCategory(Category category) {
+
+        CategoryDialogFragment categoryDialogFragment = new CategoryDialogFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "Edit Category " + category.getNombre());
+        bundle.putParcelable("category", category);
+        bundle.putInt("type", CategoryDialogFragment.EDITION_TYPE);
+        categoryDialogFragment.setArguments(bundle);
+
+        categoryDialogFragment.setTargetFragment(fragment, RESULT_EDIT_CATEGORY_DIALOG);
+        categoryDialogFragment.show(fragment.getFragmentManager(), "categoryDialogFragment");
+
+
     }
 
     private void removeCategory(Category category) {
@@ -158,4 +183,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onChange(RealmResults<Category> element) {
         this.notifyDataSetChanged();
     }
+
+
 }

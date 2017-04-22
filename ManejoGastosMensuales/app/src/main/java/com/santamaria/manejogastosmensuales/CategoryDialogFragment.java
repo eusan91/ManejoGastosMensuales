@@ -36,6 +36,8 @@ import java.util.Date;
 
 public class CategoryDialogFragment extends DialogFragment implements View.OnClickListener {
 
+    public static final int CREATION_TYPE = 99;
+    public static final int EDITION_TYPE = 98;
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
@@ -43,7 +45,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
     private static final int CAMERA_WRITE_PERMISSION = 100;
     private String title;
     private Category category;
-
+    private int dialogType;
 
     private Uri mediaUri;
 
@@ -53,15 +55,17 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
         Bundle bundle = getArguments();
 
-        if (bundle != null){
+        if (bundle != null) {
 
             if (!bundle.getString("title").isEmpty()) {
-                title =bundle.getString("title");
+                title = bundle.getString("title");
             }
 
             if (bundle.getParcelable("category") != null) {
                 category = bundle.getParcelable("category");
             }
+
+            dialogType = bundle.getInt("type", 0);
 
         }
 
@@ -97,15 +101,24 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
                 String url = "";
                 if (!categoryName.isEmpty()) {
 
+                    Category categoryTemp = null;
+
                     if (mediaUri != null) {
 
                         url = mediaUri.toString();
                     }
-                    //return bundle
-                    Category category = new Category(categoryName, url);
 
+                    categoryTemp = new Category(categoryName, url);
+
+                    //return bundle
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("Category", category);
+                    if (dialogType == CREATION_TYPE){
+                        bundle.putParcelable("Category", categoryTemp);
+                    }
+                    else if (dialogType == EDITION_TYPE) {
+                        bundle.putParcelable("CategoryNew", categoryTemp);
+                        bundle.putParcelable("CategoryOld", category);
+                    }
 
                     Intent intent = new Intent().putExtras(bundle);
 
@@ -124,6 +137,10 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
                 dismiss();
             }
         });
+
+        if (dialogType == EDITION_TYPE) {
+            categoryNameInput.setText(category.getNombre());
+        }
 
         return builder.create();
     }
@@ -160,20 +177,20 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
 
-            if (requestCode == REQUEST_GALLERY){
+            if (requestCode == REQUEST_GALLERY) {
 
                 mediaUri = data.getData();
 
-            } else if (requestCode == REQUEST_CAMERA){
+            } else if (requestCode == REQUEST_CAMERA) {
 
                 if (data != null) {
                     mediaUri = data.getData();
                 }
             }
-            
-            
+
+
         }
     }
 

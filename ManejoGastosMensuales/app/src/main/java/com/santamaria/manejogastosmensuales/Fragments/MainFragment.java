@@ -71,7 +71,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
                         startActivity(intent);
 
                     }
-                }, getActivity().getMenuInflater());
+                }, getActivity().getMenuInflater(), this);
 
         recyclerViewCategories.setLayoutManager(recyclerViewLayoutManager);
         recyclerViewCategories.setAdapter(recyclerViewAdapter);
@@ -111,36 +111,24 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
         return view;
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        menu.setHeaderTitle("Context Menu");
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.options_card_view_context_menu, menu);
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.editCardView:
-                Toast.makeText(getActivity(), "El Item a editar es: " + info.position, Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
     private void addNewCategory(Category category) {
 
         realm.beginTransaction();
         realm.copyToRealm(category);
         realm.commitTransaction();
 
+    }
+
+    private void editCategory(Category categoryOld, Category categoryNew) {
+
+        realm.beginTransaction();
+        categoryOld.setNombre(categoryNew.getNombre());
+
+        if (!categoryNew.getPicture().isEmpty()){
+            categoryOld.setPicture(categoryNew.getPicture());
+        }
+        realm.copyToRealmOrUpdate(categoryOld);
+        realm.commitTransaction();
     }
 
     @Override
@@ -152,6 +140,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
 
             Bundle bundle = new Bundle();
             bundle.putString("title", "Create new Category");
+            bundle.putInt("type", CategoryDialogFragment.CREATION_TYPE);
             categoryDialogFragment.setArguments(bundle);
 
             categoryDialogFragment.setTargetFragment(this, RESULT_CREATE_CATEGORY_DIALOG);
@@ -173,9 +162,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, Real
                     addNewCategory(category);
 
                 }
+            } else if (RecyclerViewAdapter.RESULT_EDIT_CATEGORY_DIALOG == requestCode){
+
+                Category categoryOld = data.getExtras().getParcelable("CategoryOld");
+                Category categoryNew = data.getExtras().getParcelable("CategoryNew");
+                editCategory(categoryOld, categoryNew);
             }
         }
     }
+
+
 
     @Override
     public void onChange(RealmResults<Category> element) {
