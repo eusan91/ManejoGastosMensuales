@@ -22,7 +22,6 @@ public class Category extends RealmObject implements Parcelable {
     private String nombre;
     private String picture;
     private float total;
-    private float limit;
     private RealmList<CategoryDetail> categoryDetailList;
 
     public Category() {
@@ -33,7 +32,6 @@ public class Category extends RealmObject implements Parcelable {
         this.nombre = nombre;
         this.picture = "";
         this.total = 0;
-        this.limit = 0;
         categoryDetailList = new RealmList<>();
     }
 
@@ -42,7 +40,6 @@ public class Category extends RealmObject implements Parcelable {
         this.nombre = nombre;
         this.picture = picture;
         this.total = 0;
-        this.limit = 0;
         categoryDetailList = new RealmList<>();
     }
 
@@ -51,25 +48,14 @@ public class Category extends RealmObject implements Parcelable {
         this.nombre = nombre;
         this.picture = picture;
         this.total = total;
-        this.limit = 0;
         categoryDetailList = new RealmList<>();
     }
 
-    public Category(String nombre, String picture, float total, float limit) {
+    public Category(String nombre, String picture, float total, RealmList<CategoryDetail> categoryDetailList) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;
         this.picture = picture;
         this.total = total;
-        this.limit = limit;
-        categoryDetailList = new RealmList<>();
-    }
-
-    public Category(String nombre, String picture, float total, float limit, RealmList<CategoryDetail> categoryDetailList) {
-        this.id = MyApplication.CategoryID.incrementAndGet();
-        this.nombre = nombre;
-        this.picture = picture;
-        this.total = total;
-        this.limit = limit;
         this.categoryDetailList = categoryDetailList;
     }
 
@@ -77,7 +63,6 @@ public class Category extends RealmObject implements Parcelable {
         id = in.readInt();
         nombre = in.readString();
         total = in.readFloat();
-        limit = in.readFloat();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -120,14 +105,6 @@ public class Category extends RealmObject implements Parcelable {
         this.total = total;
     }
 
-    public float getLimit() {
-        return limit;
-    }
-
-    public void setLimit(float limit) {
-        this.limit = limit;
-    }
-
     public RealmList<CategoryDetail> getCategoryDetailList() {
         return categoryDetailList;
     }
@@ -146,6 +123,5 @@ public class Category extends RealmObject implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(nombre);
         parcel.writeFloat(total);
-        parcel.writeFloat(limit);
     }
 }
