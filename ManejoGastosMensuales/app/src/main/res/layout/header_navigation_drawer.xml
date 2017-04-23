@@ -7,6 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/under_construct"/>
+        android:src="@drawable/logo_manejo_gastos_mensuales"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:text="Manejo Gastos Mensuales"
+        android:textAppearance="?attr/textAppearanceLargePopupMenu"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"/>
 
 </FrameLayout>
