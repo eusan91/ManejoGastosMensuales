@@ -4,21 +4,57 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.MainFragment">
 
-    <!--
-           android:paddingBottom="70dp"
-       android:clipToPadding="false"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
 
-       needed to add the padding to the last item
-       in the recyclerview.
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_toLeftOf="@+id/textView2"
+            android:layout_toStartOf="@+id/textView2"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:text="Total"
+            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
-    -->
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvTotalTotal"
+            android:layout_alignBottom="@+id/tvTotalTotal"
+            android:layout_gravity="right|bottom"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@+id/tvTotalTotal"
+            android:layout_toStartOf="@+id/tvTotalTotal"
+            android:text="$"
+            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+
+        <TextView
+            android:id="@+id/tvTotalTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="0.0"
+            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewCategorias"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="70dp" />
+        android:paddingBottom="70dp"
+        android:layout_marginTop="30dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddCategory"

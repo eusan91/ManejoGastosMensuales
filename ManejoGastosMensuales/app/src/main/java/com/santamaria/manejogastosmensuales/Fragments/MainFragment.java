@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
@@ -32,9 +33,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,
     private static final int RESULT_CREATE_CATEGORY_DIALOG = 100;
 
     private FloatingActionButton fabAdd;
-    RecyclerView recyclerViewCategories;
-    RecyclerView.Adapter recyclerViewAdapter;
-    RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private RecyclerView recyclerViewCategories;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private TextView tvTotal1;
+    private int TOTAL;
 
     private RealmResults<Category> categories;
 
@@ -52,11 +55,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         categories = realm.where(Category.class).findAll();
 
-        if (categories.isEmpty()){
+        if (categories.isEmpty()) {
 
-            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()){
+            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()) {
 
-                for (CategoryDefined categoryDefined: MainActivity.settingsData.getCategoryDefinedList()) {
+                for (CategoryDefined categoryDefined : MainActivity.settingsData.getCategoryDefinedList()) {
                     addNewCategory(new Category(categoryDefined.getCategoryName()));
                 }
             }
@@ -83,6 +86,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         recyclerViewCategories.setLayoutManager(recyclerViewLayoutManager);
         recyclerViewCategories.setAdapter(recyclerViewAdapter);
+
+        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
 
         //fab action
         fabAdd = (FloatingActionButton) view.findViewById(R.id.fabAddCategory);
@@ -116,7 +121,20 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         //sencilla animacion...
         recyclerViewCategories.setItemAnimator(new DefaultItemAnimator());
 
+        updateGrandtotal();
+
         return view;
+    }
+
+    private void updateGrandtotal() {
+
+        TOTAL = 0;
+        for (Category category : categories){
+            TOTAL+= category.getTotal();
+        }
+
+        tvTotal1.setText(TOTAL+"");
+
     }
 
     private void addNewCategory(Category category) {
@@ -124,7 +142,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm.beginTransaction();
         realm.copyToRealm(category);
         realm.commitTransaction();
-        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount()-1);
+        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount() - 1);
 
     }
 
@@ -133,7 +151,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm.beginTransaction();
         categoryOld.setNombre(categoryNew.getNombre());
 
-        if (!categoryNew.getPicture().isEmpty()){
+        if (!categoryNew.getPicture().isEmpty()) {
             categoryOld.setPicture(categoryNew.getPicture());
         }
         realm.copyToRealmOrUpdate(categoryOld);
@@ -163,7 +181,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         if (resultCode == Activity.RESULT_OK) {
 
-            if (RESULT_CREATE_CATEGORY_DIALOG == requestCode){
+            if (RESULT_CREATE_CATEGORY_DIALOG == requestCode) {
 
                 if (data.getExtras().containsKey("Category")) {
 
@@ -171,7 +189,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
                     addNewCategory(category);
 
                 }
-            } else if (RecyclerViewAdapter.RESULT_EDIT_CATEGORY_DIALOG == requestCode){
+            } else if (RecyclerViewAdapter.RESULT_EDIT_CATEGORY_DIALOG == requestCode) {
 
                 Category categoryOld = data.getExtras().getParcelable("CategoryOld");
                 Category categoryNew = data.getExtras().getParcelable("CategoryNew");
@@ -179,7 +197,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             }
         }
     }
-
 
 
     @Override
@@ -191,15 +208,17 @@ public class MainFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        if (categories.isEmpty()){
+        if (categories.isEmpty()) {
 
-            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()){
+            if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()) {
 
-                for (CategoryDefined categoryDefined: MainActivity.settingsData.getCategoryDefinedList()) {
+                for (CategoryDefined categoryDefined : MainActivity.settingsData.getCategoryDefinedList()) {
                     addNewCategory(new Category(categoryDefined.getCategoryName()));
                 }
             }
         }
+
+        updateGrandtotal();
 
     }
 }
