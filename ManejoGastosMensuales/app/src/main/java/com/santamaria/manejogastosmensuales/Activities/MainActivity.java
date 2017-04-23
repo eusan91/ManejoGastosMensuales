@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView = null;
     private NumberPicker startMonthPicker = null;
     private EditText currencyEditText = null;
+    PagerAdapter pagerAdapter;
 
     public static SettingsData settingsData;
     Realm realm;
@@ -94,10 +96,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 viewPager.setCurrentItem(position);
+
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
 
             }
 
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setViewPager(){
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

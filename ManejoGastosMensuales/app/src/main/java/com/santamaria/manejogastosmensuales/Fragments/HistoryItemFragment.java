@@ -4,14 +4,14 @@ package com.santamaria.manejogastosmensuales.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
@@ -20,13 +20,15 @@ import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Calendar;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class LastMonthFragment extends Fragment implements AdapterView.OnItemClickListener{
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HistoryItemFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private RealmList<Category> categories;
     private ListView listViewCategorias;
@@ -35,42 +37,56 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
     private float TOTAL;
     private TextView tvTotal1;
 
+    private int month;
+    private int year;
+
     Realm realm;
 
-    public LastMonthFragment() {
+    public HistoryItemFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        realm = realm.getDefaultInstance();
-
-        Number idNumber = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id");
-        CategoryMonth lastCategoryMonth = null;
-        if (idNumber != null){
-            lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", idNumber.intValue()).findFirst();
-        }
-
-        if (lastCategoryMonth != null ){
-         categories = lastCategoryMonth.getCategoryList();
-        }
-
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_last_month, container, false);
+        View view = inflater.inflate(R.layout.fragment_history_item, container, false);
 
-        listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
-        listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
-        listViewCategorias.setAdapter(listViewAdapter);
-        listViewCategorias.setOnItemClickListener(this);
+        Bundle bundle = getArguments();
 
-        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
-        tvCurrency.setText(MainActivity.settingsData.getCurrency());
+        if (bundle != null) {
+            month = bundle.getInt("month");
+            year = bundle.getInt("year");
+        }
 
-        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+            realm = realm.getDefaultInstance();
 
-        updateGrandtotal();
+            CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("year", year).findAll().where().equalTo("month", month).findFirst();
+
+            if (lastCategoryMonth != null) {
+                categories = lastCategoryMonth.getCategoryList();
+            }
+
+            listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
+            listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
+            listViewCategorias.setAdapter(listViewAdapter);
+            listViewCategorias.setOnItemClickListener(this);
+
+            tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+            tvCurrency.setText(MainActivity.settingsData.getCurrency());
+
+            tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+
+            if (categories != null && categories.size() > 0) {
+                updateGrandtotal();
+            } else {
+
+                RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
+                relativeLayout.setVisibility(View.INVISIBLE);
+
+            }
 
         return view;
     }
@@ -88,6 +104,7 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
     public void updateGrandtotal() {
 
         TOTAL = 0;
+
         for (Category category : categories) {
             TOTAL += category.getTotal();
         }
@@ -95,4 +112,5 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
         tvTotal1.setText(TOTAL + "");
 
     }
+
 }
