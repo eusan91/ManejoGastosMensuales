@@ -25,7 +25,7 @@
             android:id="@+id/tvCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView2"
+            android:layout_alignBottom="@+id/currency"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="12dp"
@@ -33,7 +33,7 @@
             android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tvValorCantidad"
@@ -43,7 +43,6 @@
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@+id/tvValorCantidad"
             android:layout_toStartOf="@+id/tvValorCantidad"
-            android:text="$"
             android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
         <TextView

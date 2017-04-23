@@ -34,10 +34,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
     private FloatingActionButton fabAdd;
     private RecyclerView recyclerViewCategories;
-    private RecyclerView.Adapter recyclerViewAdapter;
+    private static RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private TextView tvTotal1;
     private int TOTAL;
+    private TextView tvCurrency;
 
     private RealmResults<Category> categories;
 
@@ -88,6 +89,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         recyclerViewCategories.setAdapter(recyclerViewAdapter);
 
         tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvCurrency.setText(MainActivity.settingsData.getCurrency());
 
         //fab action
         fabAdd = (FloatingActionButton) view.findViewById(R.id.fabAddCategory);
@@ -129,11 +132,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,
     private void updateGrandtotal() {
 
         TOTAL = 0;
-        for (Category category : categories){
-            TOTAL+= category.getTotal();
+        for (Category category : categories) {
+            TOTAL += category.getTotal();
         }
 
-        tvTotal1.setText(TOTAL+"");
+        tvTotal1.setText(TOTAL + "");
 
     }
 
@@ -221,4 +224,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         updateGrandtotal();
 
     }
+
+
 }

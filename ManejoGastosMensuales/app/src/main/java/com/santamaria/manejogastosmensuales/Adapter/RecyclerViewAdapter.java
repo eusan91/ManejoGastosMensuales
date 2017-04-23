@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
@@ -47,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private MenuInflater menuInflater;
     private Fragment fragment;
+    private String currency;
 
     private Realm realm;
 
@@ -57,6 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.menuInflater = menuInflater;
         realm = Realm.getDefaultInstance();
         this.fragment = fragment;
+        this.currency = MainActivity.settingsData.getCurrency();
     }
 
     @Override
@@ -91,6 +94,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView categoryName;
         private TextView total;
         private ImageView imageView;
+        private TextView currencyView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -98,7 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.categoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
             this.total = (TextView) itemView.findViewById(R.id.tvValorCantidad);
             this.imageView = (ImageView) itemView.findViewById(R.id.imageViewCategory);
-
+            this.currencyView = (TextView) itemView.findViewById(R.id.currency);
             itemView.setOnCreateContextMenuListener(this);
 
         }
@@ -107,7 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             this.categoryName.setText(category.getNombre());
             this.total.setText(category.getTotal() + "");
-
+            this.currencyView.setText(currency);
             String currentPictureObject = category.getPicture();
 
             if (currentPictureObject.isEmpty()){
@@ -164,8 +168,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         categoryDialogFragment.setTargetFragment(fragment, RESULT_EDIT_CATEGORY_DIALOG);
         categoryDialogFragment.show(fragment.getFragmentManager(), "categoryDialogFragment");
-
-
+        
     }
 
     private void removeCategory(Category category) {

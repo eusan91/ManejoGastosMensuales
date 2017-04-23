@@ -42,7 +42,7 @@ public class MyApplication extends Application {
         SettingsData settingsData= realm.where(SettingsData.class).findFirst();
 
         if (settingsData == null){
-            initSettings(realm, new SettingsData(1, null));
+            initSettings(realm, new SettingsData(1, null, "$"));
         }
 
         realm.close();

@@ -16,11 +16,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.PagerAdapter;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
+import com.santamaria.manejogastosmensuales.Fragments.MainFragment;
 import com.santamaria.manejogastosmensuales.R;
 
 import io.realm.Realm;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout = null;
     private NavigationView navigationView = null;
     private NumberPicker startMonthPicker = null;
+    private EditText currencyEditText = null;
 
     public static SettingsData settingsData;
     Realm realm;
@@ -59,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setToolbar();
         setTabLayout();
         setViewPager();
-
-        //usado para definir el icono en el toolbar
-        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //habilitar el icono
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
 
             case R.id.exit_menu_item:
-                Toast.makeText(this, "Me has presionado, me saldré", Toast.LENGTH_SHORT).show();
                 this.finish();
                 return true;
 
@@ -158,7 +157,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case  R.id.startMonth:
                 closeNavDrawer = true;
-                createAlertDialog();
+                createAlertDialogStartMonth();
+                break;
+
+            case R.id.currency:
+                closeNavDrawer = true;
+                createAlertDialogCurrency();
                 break;
         }
 
@@ -169,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return closeNavDrawer;
     }
 
-    private void createAlertDialog() {
+    private void createAlertDialogStartMonth() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -207,6 +211,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.create().show();
     }
 
+    private void createAlertDialogCurrency() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Set Currency");
+        builder.setIcon(R.drawable.ic_currency);
+        builder.setMessage("Define currency the app will use:");
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_currency_item, null);
+        builder.setView(viewInflated);
+
+        currencyEditText = (EditText) viewInflated.findViewById(R.id.currencyInput);
+        currencyEditText.setText(settingsData.getCurrency());
+
+        builder.setPositiveButton("SET", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                String currency = currencyEditText.getText().toString().trim();
+
+                if (currency.isEmpty()){
+                    Toast.makeText(MainActivity.this, "Currency can not be empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    setCurrency(currency);
+                    navigationView.setCheckedItem(R.id.menu_none);
+                }
+
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //no action required
+                navigationView.setCheckedItem(R.id.menu_none);
+            }
+        });
+
+        builder.create().show();
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -221,6 +264,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         realm.copyToRealmOrUpdate(settingsData);
         realm.commitTransaction();
 
+    }
+
+    private void setCurrency(String currency){
+
+        realm.beginTransaction();
+        settingsData.setCurrency(currency);
+        realm.copyToRealmOrUpdate(settingsData);
+        realm.commitTransaction();
+
+        //restart app to update currency textViews
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
     }
 
     @Override

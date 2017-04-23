@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDetail;
 import com.santamaria.manejogastosmensuales.R;
 
@@ -79,7 +80,7 @@ public class CategoryDetailedAdapter extends BaseAdapter {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         viewHolder.date.setText(dateFormat.format(categoryDetailList.get(position).getDate()));
-        viewHolder.currency.setText("$");
+        viewHolder.currency.setText(MainActivity.settingsData.getCurrency());
         viewHolder.amount.setText(categoryDetailList.get(position).getAmount()+"");
 
         return view;
