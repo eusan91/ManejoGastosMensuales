@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class LastMonthFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class LastMonthFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private RealmList<Category> categories;
     private ListView listViewCategorias;
@@ -49,16 +50,16 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
 
         Number idNumber = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id");
         CategoryMonth lastCategoryMonth = null;
-        if (idNumber != null){
+        if (idNumber != null) {
             lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", idNumber.intValue()).findFirst();
         }
 
-        if (lastCategoryMonth != null ){
-         categories = lastCategoryMonth.getCategoryList();
+        if (lastCategoryMonth != null) {
+            categories = lastCategoryMonth.getCategoryList();
         }
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_last_month, container, false);
+        View view = inflater.inflate(R.layout.fragment_last_month, container, false);
 
         listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
         listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
@@ -70,7 +71,14 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
 
         tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
 
-        updateGrandtotal();
+        if (categories != null && categories.size() > 0) {
+            updateGrandtotal();
+        } else {
+
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
+            relativeLayout.setVisibility(View.INVISIBLE);
+
+        }
 
         return view;
     }
