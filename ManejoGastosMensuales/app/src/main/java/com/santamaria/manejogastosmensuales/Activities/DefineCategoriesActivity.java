@@ -6,8 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,7 +27,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 
 public class DefineCategoriesActivity extends AppCompatActivity
-        implements RealmChangeListener<SettingsData> {
+        implements RealmChangeListener<RealmList<CategoryDefined>> {
 
     private EditText categoryNameInput = null;
     private ListView listView;
@@ -33,17 +36,20 @@ public class DefineCategoriesActivity extends AppCompatActivity
     private Realm realm;
     private SettingsData settingsData;
 
+    private final int CREATE_CATEGORY = 1;
+    private final int UPDATE_CATEGORY = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_define_categories);
 
-        setTitle("Define category list");
+        setTitle("  Define category list");
 
         realm = Realm.getDefaultInstance();
         settingsData = MainActivity.settingsData;
         categoryDefinedRealmList = settingsData.getCategoryDefinedList();
-        settingsData.addChangeListener(this);
+        categoryDefinedRealmList.addChangeListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +64,7 @@ public class DefineCategoriesActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 //show AlertDialog
-                createAlertDialog();
+                createAlertDialog(CREATE_CATEGORY, null);
 
             }
         });
@@ -66,20 +72,31 @@ public class DefineCategoriesActivity extends AppCompatActivity
 
         //usado para definir el icono en el toolbar
         getSupportActionBar().setIcon(R.drawable.ic_create_categories_dark);
+
+        //set context menu to listview
+        registerForContextMenu(listView);
     }
 
-    private void createAlertDialog() {
+    private void createAlertDialog(final int dialogType, final CategoryDefined categoryDefined) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Create new Category");
 
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_category_item, null);
         builder.setView(viewInflated);
 
         categoryNameInput = (EditText) viewInflated.findViewById(R.id.categoryNameDefinedInput);
 
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        String positiveButtonText = "";
+        if (dialogType == CREATE_CATEGORY) {
+            builder.setTitle("Create new Category");
+            positiveButtonText = "Add";
+        } else {
+            builder.setTitle("Edit Category");
+            positiveButtonText = "Update";
+            categoryNameInput.setText(categoryDefined.getCategoryName());
+        }
+
+        builder.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -88,7 +105,12 @@ public class DefineCategoriesActivity extends AppCompatActivity
                 if (categoryName.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Category name can not be empty value", Toast.LENGTH_SHORT).show();
                 } else {
-                    addNewCategory(categoryName);
+                    if (dialogType == CREATE_CATEGORY) {
+                        addNewCategory(categoryName);
+                    } else {
+                        editCategory(categoryName, categoryDefined);
+
+                    }
                 }
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -111,8 +133,54 @@ public class DefineCategoriesActivity extends AppCompatActivity
 
     }
 
+    private void editCategory(String categoryName, CategoryDefined categoryDefined) {
+
+        realm.beginTransaction();
+        categoryDefined.setCategoryName(categoryName);
+        realm.copyToRealmOrUpdate(categoryDefined);
+        realm.commitTransaction();
+
+    }
+
+    private void removeCategory(CategoryDefined categoryDefined) {
+
+        realm.beginTransaction();
+        categoryDefined.deleteFromRealm();
+        realm.commitTransaction();
+
+    }
+
+    //context menu
+
     @Override
-    public void onChange(SettingsData element) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+        menu.setHeaderTitle(categoryDefinedRealmList.get(info.position).getCategoryName());
+        getMenuInflater().inflate(R.menu.options_card_view_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.editCardView:
+                createAlertDialog(UPDATE_CATEGORY, categoryDefinedRealmList.get(info.position));
+                return true;
+            case R.id.deleteCardView:
+                removeCategory(categoryDefinedRealmList.get(info.position));
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onChange(RealmList<CategoryDefined> element) {
         adapter.notifyDataSetChanged();
     }
 }

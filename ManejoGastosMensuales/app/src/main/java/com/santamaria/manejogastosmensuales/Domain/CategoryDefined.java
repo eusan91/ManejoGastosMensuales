@@ -16,7 +16,7 @@ public class CategoryDefined  extends RealmObject {
     private String categoryName;
 
     public CategoryDefined(String categoryName) {
-        this.id = MyApplication.CategoryDetailID.incrementAndGet();
+        this.id = MyApplication.CategoryDefinedID.incrementAndGet();
         this.categoryName = categoryName;
     }
 
