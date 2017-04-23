@@ -37,7 +37,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
     private static RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private TextView tvTotal1;
-    private int TOTAL;
+    private float TOTAL;
     private TextView tvCurrency;
 
     private RealmResults<Category> categories;
@@ -55,6 +55,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm = Realm.getDefaultInstance();
 
         categories = realm.where(Category.class).findAll();
+        categories.addChangeListener(this);
 
         if (categories.isEmpty()) {
 
@@ -65,8 +66,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,
                 }
             }
         }
-
-        categories.addChangeListener(this);
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -129,7 +128,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private void updateGrandtotal() {
+    public void updateGrandtotal() {
 
         TOTAL = 0;
         for (Category category : categories) {
@@ -145,7 +144,9 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm.beginTransaction();
         realm.copyToRealm(category);
         realm.commitTransaction();
-        recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount() - 1);
+
+        if (recyclerViewAdapter != null)
+            recyclerViewLayoutManager.scrollToPosition(recyclerViewAdapter.getItemCount() - 1);
 
     }
 
@@ -157,8 +158,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         if (!categoryNew.getPicture().isEmpty()) {
             categoryOld.setPicture(categoryNew.getPicture());
         }
+
+        categoryOld.setTotal(categoryNew.getTotal());
         realm.copyToRealmOrUpdate(categoryOld);
         realm.commitTransaction();
+
+        updateGrandtotal();
     }
 
     @Override
@@ -204,7 +209,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onChange(RealmResults<Category> element) {
-        recyclerViewAdapter.notifyDataSetChanged();
+        if (recyclerViewAdapter != null)
+            recyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override

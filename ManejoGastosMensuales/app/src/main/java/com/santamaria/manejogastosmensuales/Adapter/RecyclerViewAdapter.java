@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
+import com.santamaria.manejogastosmensuales.Fragments.MainFragment;
 import com.santamaria.manejogastosmensuales.R;
 import com.squareup.picasso.Picasso;
 
@@ -176,6 +177,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         realm.beginTransaction();
         category.deleteFromRealm();
         realm.commitTransaction();
+
+        ((MainFragment) fragment).updateGrandtotal();
+
     }
 
     public interface OnItemClickListener {

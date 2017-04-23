@@ -92,7 +92,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
         imageViewCamera.setOnClickListener(this);
         imageViewGallery.setOnClickListener(this);
 
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(dialogType == CREATION_TYPE ? "Create" : "Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
