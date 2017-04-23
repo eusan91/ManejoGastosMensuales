@@ -1,14 +1,20 @@
 package com.santamaria.manejogastosmensuales.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
+import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.Adapter.ListViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
@@ -20,11 +26,16 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class LastMonthFragment extends Fragment {
+public class LastMonthFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private RealmList<Category> categories;
-    ListView listViewCategorias;
-    ListViewAdapter listViewAdapter;
+    private ListView listViewCategorias;
+    private ListViewAdapter listViewAdapter;
+    private TextView tvCurrency;
+    private float TOTAL;
+    private TextView tvTotal1;
+
+
 
     Realm realm;
 
@@ -38,8 +49,11 @@ public class LastMonthFragment extends Fragment {
 
         realm = realm.getDefaultInstance();
 
-        int id = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id").intValue();
-        CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", id).findFirst();
+        Number idNumber = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id");
+        CategoryMonth lastCategoryMonth = null;
+        if (idNumber != null){
+            lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", idNumber.intValue()).findFirst();
+        }
 
         if (lastCategoryMonth != null ){
          categories = lastCategoryMonth.getCategoryList();
@@ -49,12 +63,38 @@ public class LastMonthFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_last_month, container, false);
 
         listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
-
         listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
-
         listViewCategorias.setAdapter(listViewAdapter);
+        listViewCategorias.setOnItemClickListener(this);
+
+        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvCurrency.setText(MainActivity.settingsData.getCurrency());
+
+        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+
+        updateGrandtotal();
 
         return view;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        Intent intent = new Intent(getContext(), CategoryDetailedActivity.class);
+        intent.putExtra("categoryID", categories.get(position).getId());
+        intent.putExtra("CREATION", false);
+        startActivity(intent);
+
+    }
+
+    public void updateGrandtotal() {
+
+        TOTAL = 0;
+        for (Category category : categories) {
+            TOTAL += category.getTotal();
+        }
+
+        tvTotal1.setText(TOTAL + "");
+
+    }
 }

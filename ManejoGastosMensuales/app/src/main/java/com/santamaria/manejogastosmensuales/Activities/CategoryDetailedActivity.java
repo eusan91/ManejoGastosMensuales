@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.Activities;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
     private TextView okButton;
     private TextView cancelButton;
     private AlertDialog alertDialog;
+    private FloatingActionButton fabAdd;
 
     private int categoryID;
     private Realm realm;
@@ -61,6 +63,12 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
 
         Intent intent = getIntent();
         categoryID = intent.getIntExtra("categoryID", -1);
+        boolean CREATION = intent.getBooleanExtra("CREATION", true);
+
+        fabAdd = (FloatingActionButton) findViewById(R.id.fabAddDetail);
+        if (!CREATION) {
+            fabAdd.hide();
+        }
 
         if (categoryID >= 0) {
             realm = Realm.getDefaultInstance();

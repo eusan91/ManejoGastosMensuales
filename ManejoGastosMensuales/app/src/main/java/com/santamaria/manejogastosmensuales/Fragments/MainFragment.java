@@ -217,7 +217,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
     @Override
     public void onChange(RealmList<Category> element) {
         if (recyclerViewAdapter != null)

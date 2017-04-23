@@ -9,8 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:clickable="true"
-        android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         card_view:cardBackgroundColor="#E2E2E2"
         card_view:cardCornerRadius="4dp">
