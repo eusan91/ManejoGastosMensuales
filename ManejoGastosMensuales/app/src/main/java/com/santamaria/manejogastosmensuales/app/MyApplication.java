@@ -45,6 +45,14 @@ public class MyApplication extends Application {
             initSettings(realm, new SettingsData(1, null, "$"));
         }
 
+        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo("currentMonth", true).findFirst();
+
+        if(categoryMonth == null){
+
+            initCategoryMonth(realm);
+
+        }
+
         realm.close();
 
     }
@@ -70,6 +78,13 @@ public class MyApplication extends Application {
 
         realm.beginTransaction();
         realm.copyToRealm(settingsData);
+        realm.commitTransaction();
+    }
+
+    private void initCategoryMonth(Realm realm){
+
+        realm.beginTransaction();
+        realm.copyToRealm(new CategoryMonth());
         realm.commitTransaction();
     }
 

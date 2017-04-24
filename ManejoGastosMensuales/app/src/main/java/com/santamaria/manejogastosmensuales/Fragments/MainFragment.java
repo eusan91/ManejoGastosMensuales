@@ -21,14 +21,16 @@ import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
+import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MainFragment extends Fragment implements View.OnClickListener,
-        RealmChangeListener<RealmResults<Category>> {
+        RealmChangeListener<RealmList<Category>> {
 
     private static final int RESULT_CREATE_CATEGORY_DIALOG = 100;
 
@@ -40,7 +42,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
     private float TOTAL;
     private TextView tvCurrency;
 
-    private RealmResults<Category> categories;
+    private RealmList<Category> categories;
 
     private Realm realm;
 
@@ -54,10 +56,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         realm = Realm.getDefaultInstance();
 
-        categories = realm.where(Category.class).findAll();
-        categories.addChangeListener(this);
+        //get current month
+        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo("currentMonth", true).findFirst();
 
-        if (categories.isEmpty()) {
+        if (categoryMonth != null) {
+            categories = categoryMonth.getCategoryList();
+        }
+
+        if (categories == null || categories.isEmpty()) {
 
             if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()) {
 
@@ -66,6 +72,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,
                 }
             }
         }
+
+        categories.addChangeListener(this);
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -143,6 +151,9 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         realm.beginTransaction();
         realm.copyToRealm(category);
+
+        //added to current list
+        categories.add(category);
         realm.commitTransaction();
 
         if (recyclerViewAdapter != null)
@@ -208,7 +219,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
 
     @Override
-    public void onChange(RealmResults<Category> element) {
+    public void onChange(RealmList<Category> element) {
         if (recyclerViewAdapter != null)
             recyclerViewAdapter.notifyDataSetChanged();
     }

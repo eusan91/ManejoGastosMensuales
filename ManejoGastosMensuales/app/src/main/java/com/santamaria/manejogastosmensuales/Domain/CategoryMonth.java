@@ -22,15 +22,24 @@ public class CategoryMonth extends RealmObject implements Parcelable {
     @PrimaryKey
     private int id;
     private int month;
+    private int year;
+    private boolean currentMonth;
     private RealmList<Category> categoryList;
 
     public CategoryMonth() {
+        this.id = MyApplication.CategoryMonthID.incrementAndGet();
+        this.month = Calendar.getInstance().get(Calendar.MONTH) - 1;
+        this.year = Calendar.getInstance().get(Calendar.YEAR);
+        this.categoryList = new RealmList<>();
+        this.currentMonth = true;
     }
 
     public CategoryMonth(RealmList<Category> categoryList) {
         this.id = MyApplication.CategoryMonthID.incrementAndGet();
         this.month = Calendar.getInstance().get(Calendar.MONTH) - 1;
+        this.year = Calendar.getInstance().get(Calendar.YEAR);
         this.categoryList = categoryList;
+        this.currentMonth = true;
     }
 
     protected CategoryMonth(Parcel in) {
@@ -59,6 +68,22 @@ public class CategoryMonth extends RealmObject implements Parcelable {
 
     public void setMonth(int month) {
         this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public boolean isCurrentMonth() {
+        return currentMonth;
+    }
+
+    public void setCurrentMonth(boolean currentMonth) {
+        this.currentMonth = currentMonth;
     }
 
     public RealmList<Category> getCategoryList() {

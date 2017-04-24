@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.PagerAdapter;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
-import com.santamaria.manejogastosmensuales.Fragments.MainFragment;
 import com.santamaria.manejogastosmensuales.R;
 
 import io.realm.Realm;
