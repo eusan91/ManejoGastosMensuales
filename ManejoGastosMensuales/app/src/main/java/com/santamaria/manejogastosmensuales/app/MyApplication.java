@@ -93,6 +93,9 @@ public class MyApplication extends Application {
                     } else if (maxDayOfMonth <  settingsData.getStartMonth() && currentDay == maxDayOfMonth){
                         updateCategoryMonthNotCurrent(realm, categoryMonth);
                         initCategoryMonth(realm);
+                    } else if (settingsData.getStartMonth() < currentDay){
+                        updateCategoryMonthNotCurrent(realm, categoryMonth);
+                        initCategoryMonth(realm);
                     }
 
                     //si el mes actual es mayor que el mes actual (2  o + meses adelante)

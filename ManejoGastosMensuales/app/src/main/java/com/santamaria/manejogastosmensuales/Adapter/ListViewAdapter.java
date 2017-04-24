@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.Adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,21 +69,14 @@ public class ListViewAdapter extends BaseAdapter {
 
         String currentCategoryName = categoryList.get(position).getNombre();
         float currentTotal = categoryList.get(position).getTotal();
-        Object currentPictureObject = categoryList.get(position).getPicture();
+        String currentPictureObject = categoryList.get(position).getPicture();
 
-        if (currentPictureObject instanceof String){
-            String currPicture = currentPictureObject.toString();
-
-            if (currPicture.contains("http")){
-                //url
-                Picasso.with(context).load( currentPictureObject.toString()).fit().into(holder.imageView);
-            } else {
-                //create a file
-            }
-
-        } else if (currentPictureObject instanceof Integer){
-            Picasso.with(context).load((int) currentPictureObject).fit().into(holder.imageView);
+        if (currentPictureObject.isEmpty()){
+            Picasso.with(context).load(R.drawable.under_construct).fit().into(holder.imageView);
+        } else {
+            Picasso.with(context).load(Uri.parse(currentPictureObject)).fit().into(holder.imageView);
         }
+        
         holder.categoryName.setText(currentCategoryName);
         holder.total.setText(currentTotal+"");
 

@@ -11,16 +11,22 @@ import android.widget.ListView;
 
 import com.santamaria.manejogastosmensuales.Adapter.ListViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
+import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+
 public class LastMonthFragment extends Fragment {
 
-    List<Category> categoryList;
+    private RealmList<Category> categories;
     ListView listViewCategorias;
     ListViewAdapter listViewAdapter;
+
+    Realm realm;
 
     public LastMonthFragment() {
         // Required empty public constructor
@@ -29,18 +35,22 @@ public class LastMonthFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        realm = realm.getDefaultInstance();
+
+        int id = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id").intValue();
+        CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", id).findFirst();
+
+        if (lastCategoryMonth != null ){
+         categories = lastCategoryMonth.getCategoryList();
+        }
+
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_last_month, container, false);
 
         listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
 
-        categoryList = new LinkedList<>();
-
-        categoryList.add(new Category("Gasolina", "", (float) 100.0));
-        categoryList.add(new Category("Servicios", "", (float) 200.0));
-        categoryList.add(new Category("Comida", "", (float) 300.0));
-
-        listViewAdapter = new ListViewAdapter(categoryList, getContext(), R.layout.listview_cardview_item);
+        listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
 
         listViewCategorias.setAdapter(listViewAdapter);
 
