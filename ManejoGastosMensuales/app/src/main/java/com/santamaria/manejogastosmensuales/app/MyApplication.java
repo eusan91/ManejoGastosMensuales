@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.app;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.santamaria.manejogastosmensuales.Domain.Category;
@@ -11,6 +12,7 @@ import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
@@ -66,14 +68,16 @@ public class MyApplication extends Application {
 
         if (categoryMonth != null) {
 
-            //si etamos en el mismo año
-            if (categoryMonth.getYear() == (int) Calendar.getInstance().get(Calendar.YEAR)) {
+            //si estamos en el mismo año
+            if (categoryMonth.getYear() == (int)Calendar.getInstance().get(Calendar.YEAR)) {
 
                 //obtiene el siguiente mes
                 int nextMonth = categoryMonth.getMonth() + 1;
 
                 //si ya estamos en el mismo mes de corte
-                if (nextMonth == (int) Calendar.getInstance().get(Calendar.MONTH)) {
+                int currentMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
+
+                if (nextMonth == currentMonth ) {
 
                     int maxDayOfMonth = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
 
@@ -85,11 +89,6 @@ public class MyApplication extends Application {
                         updateCategoryMonthNotCurrent(realm, categoryMonth);
                         initCategoryMonth(realm);
 
-                        //si el dia actual es superior al corte
-                    } else if (currentDay > settingsData.getStartMonth()) {
-                        updateCategoryMonthNotCurrent(realm, categoryMonth);
-                        initCategoryMonth(realm);
-
                         //si el corte es superior al último día disponible del mes y estamos en ese dia
                     } else if (maxDayOfMonth <  settingsData.getStartMonth() && currentDay == maxDayOfMonth){
                         updateCategoryMonthNotCurrent(realm, categoryMonth);
@@ -97,7 +96,7 @@ public class MyApplication extends Application {
                     }
 
                     //si el mes actual es mayor que el mes actual (2  o + meses adelante)
-                } else if ((int) Calendar.getInstance().get(Calendar.MONTH) > nextMonth) {
+                } else if (currentMonth > nextMonth) {
                     updateCategoryMonthNotCurrent(realm, categoryMonth);
                     initCategoryMonth(realm);
                 }
