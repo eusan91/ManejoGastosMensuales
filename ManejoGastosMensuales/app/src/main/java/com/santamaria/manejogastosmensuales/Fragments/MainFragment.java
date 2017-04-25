@@ -171,7 +171,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             categoryOld.setPicture(categoryNew.getPicture());
         }
 
-        categoryOld.setTotal(categoryNew.getTotal());
+        //categoryOld.setTotal(categoryNew.getTotal());
         realm.copyToRealmOrUpdate(categoryOld);
         realm.commitTransaction();
 
