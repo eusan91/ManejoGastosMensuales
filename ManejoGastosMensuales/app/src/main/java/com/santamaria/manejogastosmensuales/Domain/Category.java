@@ -27,14 +27,6 @@ public class Category extends RealmObject implements Parcelable {
     public Category() {
     }
 
-    public Category(String nombre) {
-        this.id = MyApplication.CategoryID.incrementAndGet();
-        this.nombre = nombre;
-        this.color = 0;
-        this.total = 0;
-        categoryDetailList = new RealmList<>();
-    }
-
     public Category(String nombre, int color) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;

@@ -177,7 +177,9 @@ public class DefineCategoriesActivity extends AppCompatActivity
 
         realm.beginTransaction();
         categoryDefined.setCategoryName(categoryName);
-        categoryDefined.setColor(color);
+        if (color != 0) {
+            categoryDefined.setColor(color);
+        }
         realm.copyToRealmOrUpdate(categoryDefined);
         realm.commitTransaction();
 

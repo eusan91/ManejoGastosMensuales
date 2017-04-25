@@ -68,7 +68,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()) {
 
                 for (CategoryDefined categoryDefined : MainActivity.settingsData.getCategoryDefinedList()) {
-                    addNewCategory(new Category(categoryDefined.getCategoryName()));
+                    addNewCategory(new Category(categoryDefined.getCategoryName(), categoryDefined.getColor()));
                 }
             }
         }
@@ -232,7 +232,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             if (!MainActivity.settingsData.getCategoryDefinedList().isEmpty()) {
 
                 for (CategoryDefined categoryDefined : MainActivity.settingsData.getCategoryDefinedList()) {
-                    addNewCategory(new Category(categoryDefined.getCategoryName()));
+                    addNewCategory(new Category(categoryDefined.getCategoryName(), categoryDefined.getColor()));
                 }
             }
         }
