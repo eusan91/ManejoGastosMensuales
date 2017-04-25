@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.Activities;
 
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -12,9 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.santamaria.manejogastosmensuales.Adapter.CategoryDefinedAdapter;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
@@ -33,6 +39,7 @@ public class DefineCategoriesActivity extends AppCompatActivity
     private CategoryDefinedAdapter adapter;
     private Realm realm;
     private SettingsData settingsData;
+    private int selectedColorR = 0;
 
     private final int CREATE_CATEGORY = 1;
     private final int UPDATE_CATEGORY = 2;
@@ -83,6 +90,13 @@ public class DefineCategoriesActivity extends AppCompatActivity
         builder.setView(viewInflated);
 
         categoryNameInput = (EditText) viewInflated.findViewById(R.id.categoryNameDefinedInput);
+        ImageView imageViewColors = (ImageView) viewInflated.findViewById(R.id.imageViewColors);
+        imageViewColors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createColorPickerDialog();
+            }
+        });
 
         String positiveButtonText = "";
         if (dialogType == CREATE_CATEGORY) {
@@ -99,14 +113,14 @@ public class DefineCategoriesActivity extends AppCompatActivity
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 String categoryName = categoryNameInput.getText().toString().trim();
-
+                int color = 0;
                 if (categoryName.isEmpty()) {
                     Toast.makeText(getApplicationContext(), R.string.Define_Categories_Act_Dialog_error_category_name_empty, Toast.LENGTH_SHORT).show();
                 } else {
                     if (dialogType == CREATE_CATEGORY) {
-                        addNewCategory(categoryName);
+                        addNewCategory(categoryName, selectedColorR);
                     } else {
-                        editCategory(categoryName, categoryDefined);
+                        editCategory(categoryName, selectedColorR, categoryDefined);
 
                     }
                 }
@@ -121,20 +135,49 @@ public class DefineCategoriesActivity extends AppCompatActivity
         builder.create().show();
     }
 
-    private void addNewCategory(String categoryName) {
+    private void createColorPickerDialog(){
+
+        ColorPickerDialogBuilder
+                .with(this)
+                .setTitle("Choose color")
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int selectedColor) {
+                        //Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setPositiveButton("ok", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                        selectedColorR = selectedColor;
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
+                .show();
+    }
+
+    private void addNewCategory(String categoryName, int color) {
 
         realm.beginTransaction();
-        CategoryDefined categoryDefined = new CategoryDefined(categoryName);
+        CategoryDefined categoryDefined = new CategoryDefined(categoryName, color);
         realm.copyToRealm(categoryDefined);
         settingsData.getCategoryDefinedList().add(categoryDefined);
         realm.commitTransaction();
 
     }
 
-    private void editCategory(String categoryName, CategoryDefined categoryDefined) {
+    private void editCategory(String categoryName, int color, CategoryDefined categoryDefined) {
 
         realm.beginTransaction();
         categoryDefined.setCategoryName(categoryName);
+        categoryDefined.setColor(color);
         realm.copyToRealmOrUpdate(categoryDefined);
         realm.commitTransaction();
 

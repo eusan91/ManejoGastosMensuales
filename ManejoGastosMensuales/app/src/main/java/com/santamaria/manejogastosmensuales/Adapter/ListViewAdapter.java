@@ -1,17 +1,15 @@
 package com.santamaria.manejogastosmensuales.Adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class ListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.categoryName = (TextView) convertView.findViewById(R.id.tvCategoryName);
             holder.total= (TextView) convertView.findViewById(R.id.tvValorCantidad);
-            holder.imageView= (ImageView) convertView.findViewById(R.id.imageViewCategory);
+            holder.frameColorLayout = (FrameLayout) convertView.findViewById(R.id.imageViewCategory);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -69,16 +67,11 @@ public class ListViewAdapter extends BaseAdapter {
 
         String currentCategoryName = categoryList.get(position).getNombre();
         float currentTotal = categoryList.get(position).getTotal();
-        String currentPictureObject = categoryList.get(position).getPicture();
+        int color = categoryList.get(position).getColor();
 
-        if (currentPictureObject.isEmpty()){
-            Picasso.with(context).load(R.drawable.under_construct).fit().into(holder.imageView);
-        } else {
-            Picasso.with(context).load(Uri.parse(currentPictureObject)).fit().into(holder.imageView);
-        }
-        
         holder.categoryName.setText(currentCategoryName);
         holder.total.setText(currentTotal+"");
+        holder.frameColorLayout.setBackgroundColor(color);
 
         return convertView;
     }
@@ -88,7 +81,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         private TextView categoryName;
         private TextView total;
-        private ImageView imageView;
+        private FrameLayout frameColorLayout;
 
     }
 }

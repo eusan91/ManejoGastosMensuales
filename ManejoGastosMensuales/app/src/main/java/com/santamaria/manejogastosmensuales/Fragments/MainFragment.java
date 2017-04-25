@@ -28,7 +28,6 @@ import com.santamaria.manejogastosmensuales.app.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
 public class MainFragment extends Fragment implements View.OnClickListener,
         RealmChangeListener<RealmList<Category>> {
@@ -167,8 +166,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm.beginTransaction();
         categoryOld.setNombre(categoryNew.getNombre());
 
-        if (!categoryNew.getPicture().isEmpty()) {
-            categoryOld.setPicture(categoryNew.getPicture());
+        if (categoryNew.getColor() != 0) {
+            categoryOld.setColor(categoryNew.getColor());
         }
 
         //categoryOld.setTotal(categoryNew.getTotal());

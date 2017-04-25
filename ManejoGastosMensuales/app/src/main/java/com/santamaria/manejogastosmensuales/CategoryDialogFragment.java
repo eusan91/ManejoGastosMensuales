@@ -4,32 +4,22 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.santamaria.manejogastosmensuales.Domain.Category;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Santamaria on 12/04/2017.
@@ -47,15 +37,10 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
     public static final int CREATION_TYPE = 99;
     public static final int EDITION_TYPE = 98;
 
-    private static final int REQUEST_CAMERA = 1;
-    private static final int REQUEST_GALLERY = 2;
-
-    private static final int CAMERA_WRITE_PERMISSION = 100;
     private String title;
     private Category category;
     private int dialogType;
-
-    private Uri mediaUri;
+    private int selectedColorR;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,9 +62,6 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
         }
 
-        if (savedInstanceState != null) {
-            mediaUri = (Uri) savedInstanceState.getParcelable("mediaUri");
-        }
     }
 
     @NonNull
@@ -94,11 +76,9 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
         builder.setView(viewInflated);
 
         final EditText categoryNameInput = (EditText) viewInflated.findViewById(R.id.categoryNameInput);
-        final ImageView imageViewCamera = (ImageView) viewInflated.findViewById(R.id.imageViewCamera);
-        final ImageView imageViewGallery = (ImageView) viewInflated.findViewById(R.id.imageViewGallery);
+        final ImageView imageViewColors = (ImageView) viewInflated.findViewById(R.id.imageViewColors);
 
-        imageViewCamera.setOnClickListener(this);
-        imageViewGallery.setOnClickListener(this);
+        imageViewColors.setOnClickListener(this);
 
         builder.setPositiveButton(dialogType == CREATION_TYPE ?
                 getString(R.string.Category_dialog_frag_positive_button_text_create) : getString(R.string.Category_dialog_frag_positive_button_text_update), new DialogInterface.OnClickListener() {
@@ -107,17 +87,11 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
                 String categoryName = categoryNameInput.getText().toString().trim();
 
-                String url = "";
                 if (!categoryName.isEmpty()) {
 
                     Category categoryTemp = null;
 
-                    if (mediaUri != null) {
-
-                        url = mediaUri.toString();
-                    }
-
-                    categoryTemp = new Category(categoryName, url);
+                    categoryTemp = new Category(categoryName, selectedColorR);
 
                     //return bundle
                     Bundle bundle = new Bundle();
@@ -155,171 +129,40 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelable("mediaUri", mediaUri);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        if (savedInstanceState != null) {
-
-            mediaUri = (Uri) savedInstanceState.getParcelable("mediaUri");
-        }
-    }
-
-    @Override
     public void onClick(View view) {
 
-        if (view.getId() == R.id.imageViewCamera) {
-            takePicture();
-        } else if (view.getId() == R.id.imageViewGallery) {
-            selectPictureFromGallery();
+        if (view.getId() == R.id.imageViewColors) {
+            createColorPickerDialog();
         }
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void createColorPickerDialog(){
 
-        if (resultCode == Activity.RESULT_OK) {
-
-            if (requestCode == REQUEST_GALLERY) {
-
-                mediaUri = data.getData();
-
-            } else if (requestCode == REQUEST_CAMERA) {
-
-                if (data != null) {
-                    mediaUri = data.getData();
-                }
-            }
-
-
-        }
-    }
-
-    //------------------------------- Logic to take pictures ----------------------------------
-
-    private void takePicture() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                //ask for permission
-                if (shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                    showExplanationOfRequestPermission();
-
-                } else {
-                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_WRITE_PERMISSION);
-                }
-            } else {
-                //no need for permission
-                createMedia();
-            }
-        } else {
-            //No permissions required
-            createMedia();
-        }
-    }
-
-    private void showExplanationOfRequestPermission() {
-
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Request of permissions")
-                .setMessage("This application needs permissions to save pictures")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        ColorPickerDialogBuilder
+                .with(getContext())
+                .setTitle("Choose color")
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //request permission
-                        requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_WRITE_PERMISSION);
+                    public void onColorSelected(int selectedColor) {
+                        //Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setPositiveButton("ok", new ColorPickerClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Permission not grated, we can not open the camera", Toast.LENGTH_SHORT).show();
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                        selectedColorR = selectedColor;
                     }
                 })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
                 .show();
-    }
-
-    private void createMedia() {
-
-        try {
-            mediaUri = createMediaFile();
-
-            if (mediaUri == null) {
-                Toast.makeText(getContext(), "There was an error", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mediaUri);
-                startActivityForResult(intent, REQUEST_CAMERA);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == CAMERA_WRITE_PERMISSION) {
-
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                createMedia();
-            }
-        }
-    }
-
-    private Uri createMediaFile() throws IOException {
-
-        if (!availableInternalStorage()) {
-            return null;
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        String fileName = "IMG_" + timeStamp + "_";
-        File file;
-
-        File pathToStorage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        file = File.createTempFile(fileName, ".jpg", pathToStorage);
-
-        MediaScannerConnection.scanFile(getContext(), new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
-
-        return Uri.fromFile(file);
-    }
-
-    private boolean availableInternalStorage() {
-
-        String state = Environment.getExternalStorageState();
-
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    //------------------------------- Logic select pictures from gallery ----------------------------------
-
-
-    private void selectPictureFromGallery() {
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_GALLERY);
-
     }
 
 }

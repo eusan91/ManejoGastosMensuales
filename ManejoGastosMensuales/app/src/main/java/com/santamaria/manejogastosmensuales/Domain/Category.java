@@ -20,7 +20,7 @@ public class Category extends RealmObject implements Parcelable {
     private int id;
     @Required
     private String nombre;
-    private String picture;
+    private int color;
     private float total;
     private RealmList<CategoryDetail> categoryDetailList;
 
@@ -30,31 +30,31 @@ public class Category extends RealmObject implements Parcelable {
     public Category(String nombre) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;
-        this.picture = "";
+        this.color = 0;
         this.total = 0;
         categoryDetailList = new RealmList<>();
     }
 
-    public Category(String nombre, String picture) {
+    public Category(String nombre, int color) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;
-        this.picture = picture;
+        this.color = color;
         this.total = 0;
         categoryDetailList = new RealmList<>();
     }
 
-    public Category(String nombre, String picture, float total) {
+    public Category(String nombre, int color, float total) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;
-        this.picture = picture;
+        this.color = color;
         this.total = total;
         categoryDetailList = new RealmList<>();
     }
 
-    public Category(String nombre, String picture, float total, RealmList<CategoryDetail> categoryDetailList) {
+    public Category(String nombre, int color, float total, RealmList<CategoryDetail> categoryDetailList) {
         this.id = MyApplication.CategoryID.incrementAndGet();
         this.nombre = nombre;
-        this.picture = picture;
+        this.color = color;
         this.total = total;
         this.categoryDetailList = categoryDetailList;
     }
@@ -89,12 +89,12 @@ public class Category extends RealmObject implements Parcelable {
         this.nombre = nombre;
     }
 
-    public String getPicture() {
-        return picture;
+    public int getColor() {
+        return color;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public float getTotal() {

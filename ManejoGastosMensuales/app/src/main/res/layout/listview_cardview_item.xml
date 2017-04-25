@@ -13,10 +13,10 @@
         card_view:cardBackgroundColor="#E2E2E2"
         card_view:cardCornerRadius="4dp">
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/imageViewCategory"
             android:layout_width="match_parent"
-            android:layout_height="170dp" />
+            android:layout_height="70dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

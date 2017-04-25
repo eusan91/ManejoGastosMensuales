@@ -1,34 +1,24 @@
 package com.santamaria.manejogastosmensuales.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Fragments.MainFragment;
 import com.santamaria.manejogastosmensuales.R;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
 import io.realm.Realm;
@@ -94,7 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private TextView categoryName;
         private TextView total;
-        private ImageView imageView;
+        private FrameLayout frameColorLayout;
         private TextView currencyView;
 
         public ViewHolder(View itemView) {
@@ -102,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             this.categoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
             this.total = (TextView) itemView.findViewById(R.id.tvValorCantidad);
-            this.imageView = (ImageView) itemView.findViewById(R.id.imageViewCategory);
+            this.frameColorLayout = (FrameLayout) itemView.findViewById(R.id.imageViewCategory);
             this.currencyView = (TextView) itemView.findViewById(R.id.currency);
             itemView.setOnCreateContextMenuListener(this);
 
@@ -113,13 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.categoryName.setText(category.getNombre());
             this.total.setText(category.getTotal() + "");
             this.currencyView.setText(currency);
-            String currentPictureObject = category.getPicture();
-
-            if (currentPictureObject.isEmpty()){
-                Picasso.with(imageView.getContext()).load(R.drawable.under_construct).fit().into(imageView);
-            } else {
-                Picasso.with(imageView.getContext()).load(Uri.parse(currentPictureObject)).fit().into(imageView);
-            }
+            frameColorLayout.setBackgroundColor(category.getColor());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

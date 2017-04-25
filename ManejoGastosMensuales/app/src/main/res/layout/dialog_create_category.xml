@@ -25,23 +25,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Seleccione la portada:"/>
+            android:text="@string/dialog_create_category_color_label"/>
 
         <ImageView
-            android:id="@+id/imageViewCamera"
+            android:id="@+id/imageViewColors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_camera"
-            android:layout_marginLeft="15dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"/>
-
-        <ImageView
-            android:id="@+id/imageViewGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_gallery"
+            android:src="@drawable/ic_color"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="1dp"
             android:clickable="true"

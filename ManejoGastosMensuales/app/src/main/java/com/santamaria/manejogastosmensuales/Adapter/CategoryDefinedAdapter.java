@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
@@ -53,7 +54,7 @@ public class CategoryDefinedAdapter extends BaseAdapter {
             view = LayoutInflater.from(context).inflate(layout, null);
 
             viewHolder.categoryName = (TextView) view.findViewById(R.id.textViewCategoryDefined);
-
+            viewHolder.LinearColorLayout = (LinearLayout) view.findViewById(R.id.LinearColorBackground);
             view.setTag(viewHolder);
 
         } else {
@@ -63,6 +64,7 @@ public class CategoryDefinedAdapter extends BaseAdapter {
         }
 
         viewHolder.categoryName.setText(categoryDefinedList.get(i).getCategoryName());
+        viewHolder.LinearColorLayout.setBackgroundColor(categoryDefinedList.get(i).getColor());
 
 
         return view;
@@ -71,5 +73,6 @@ public class CategoryDefinedAdapter extends BaseAdapter {
     static class ViewHolder {
 
         TextView categoryName;
+        LinearLayout LinearColorLayout;
     }
 }

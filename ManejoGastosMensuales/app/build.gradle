@@ -35,5 +35,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.uphyca:stetho_realm:2.0.0'
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
     testCompile 'junit:junit:4.12'
 }
