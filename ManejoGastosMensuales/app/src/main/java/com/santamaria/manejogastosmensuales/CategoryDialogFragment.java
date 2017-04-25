@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.santamaria.manejogastosmensuales.Adapter.RecyclerViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 
 import java.io.File;
@@ -35,6 +36,13 @@ import java.util.Date;
  */
 
 public class CategoryDialogFragment extends DialogFragment implements View.OnClickListener {
+
+    public static final String TITLE_EXTRA = "title";
+    public static final String CATEGORY_EXTRA = "category";
+    public static final String TYPE_EXTRA = "type";
+    public static final String CATEGORY_DIALOG_FRAGMENT_EXTRA = "categoryDialogFragment";
+    public static final String CATEGORY_NEW_EXTRA = "CategoryNew";
+    public static final String CATEGORY_OLD_EXTRA = "CategoryOld";
 
     public static final int CREATION_TYPE = 99;
     public static final int EDITION_TYPE = 98;
@@ -57,15 +65,15 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
         if (bundle != null) {
 
-            if (!bundle.getString("title").isEmpty()) {
-                title = bundle.getString("title");
+            if (!bundle.getString(TITLE_EXTRA).isEmpty()) {
+                title = bundle.getString(TITLE_EXTRA);
             }
 
-            if (bundle.getParcelable("category") != null) {
-                category = bundle.getParcelable("category");
+            if (bundle.getParcelable(CATEGORY_EXTRA) != null) {
+                category = bundle.getParcelable(CATEGORY_EXTRA);
             }
 
-            dialogType = bundle.getInt("type", 0);
+            dialogType = bundle.getInt(TYPE_EXTRA, 0);
 
         }
 
@@ -92,7 +100,8 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
         imageViewCamera.setOnClickListener(this);
         imageViewGallery.setOnClickListener(this);
 
-        builder.setPositiveButton(dialogType == CREATION_TYPE ? "Create" : "Update", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(dialogType == CREATION_TYPE ?
+                getString(R.string.Category_dialog_frag_positive_button_text_create) : getString(R.string.Category_dialog_frag_positive_button_text_update), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -113,11 +122,11 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
                     //return bundle
                     Bundle bundle = new Bundle();
                     if (dialogType == CREATION_TYPE){
-                        bundle.putParcelable("Category", categoryTemp);
+                        bundle.putParcelable(CATEGORY_EXTRA, categoryTemp);
                     }
                     else if (dialogType == EDITION_TYPE) {
-                        bundle.putParcelable("CategoryNew", categoryTemp);
-                        bundle.putParcelable("CategoryOld", category);
+                        bundle.putParcelable(CATEGORY_NEW_EXTRA, categoryTemp);
+                        bundle.putParcelable(CATEGORY_OLD_EXTRA, category);
                     }
 
                     Intent intent = new Intent().putExtras(bundle);
@@ -127,7 +136,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
                     dismiss();
 
                 } else {
-                    Toast.makeText(getActivity(), "The name is required to create a new Category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.Category_dialog_frag_error_category_name_empty, Toast.LENGTH_SHORT).show();
                 }
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

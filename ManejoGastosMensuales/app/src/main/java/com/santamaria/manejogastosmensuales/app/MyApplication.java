@@ -1,7 +1,6 @@
 package com.santamaria.manejogastosmensuales.app;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.santamaria.manejogastosmensuales.Domain.Category;
@@ -12,7 +11,6 @@ import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
@@ -31,6 +29,10 @@ public class MyApplication extends Application {
     public static AtomicInteger CategoryMonthID = new AtomicInteger();
     public static AtomicInteger CategoryDefinedID = new AtomicInteger();
 
+    public static String ID_COLUMN = "id";
+    public static String CURRENT_MONTH_COLUMN = "currentMonth";
+    public static String YEAR_COLUMN = "year";
+    public static String MONTH_COLUMN = "month";
 
     @Override
     public void onCreate() {
@@ -64,7 +66,7 @@ public class MyApplication extends Application {
 
     private void loadData(Realm realm, SettingsData settingsData) {
 
-        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo("currentMonth", true).findFirst();
+        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo(CURRENT_MONTH_COLUMN, true).findFirst();
 
         if (categoryMonth != null) {
 
@@ -131,7 +133,7 @@ public class MyApplication extends Application {
     private <T extends RealmObject> AtomicInteger setAtomicId(Realm realm, Class<T> anyClass) {
 
         RealmResults<T> results = realm.where(anyClass).findAll();
-        return (results.size() > 0) ? new AtomicInteger(results.max("id").intValue()) : new AtomicInteger();
+        return (results.size() > 0) ? new AtomicInteger(results.max(ID_COLUMN).intValue()) : new AtomicInteger();
     }
 
     private void initSettings(Realm realm, SettingsData settingsData) {

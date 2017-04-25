@@ -25,6 +25,9 @@ import io.realm.Realm;
 public class HistoryFragment extends Fragment implements NumberPicker.OnValueChangeListener{
 
 
+    public static final String YEAR_BUNDLE_EXTRA = "year";
+    public static String MONTH_BUNDLE_EXTRA = "month";
+
     private String[] mShortMonths;
     private NumberPicker mMonthSpinner = null;
     private NumberPicker mYearSpinner = null;
@@ -89,8 +92,8 @@ public class HistoryFragment extends Fragment implements NumberPicker.OnValueCha
         } else {
 
             Bundle bundle = new Bundle();
-            bundle.putInt("month", month);
-            bundle.putInt("year", year);
+            bundle.putInt(MONTH_BUNDLE_EXTRA, month);
+            bundle.putInt(YEAR_BUNDLE_EXTRA, year);
 
             Fragment fragment = new HistoryItemFragment();
             fragment.setArguments(bundle);

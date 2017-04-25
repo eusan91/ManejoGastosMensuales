@@ -85,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setTabLayout(){
 
-        tabLayout.addTab(tabLayout.newTab().setText("Mes Anterior"));
-        tabLayout.addTab(tabLayout.newTab().setText("Mes Actual"));
-        tabLayout.addTab(tabLayout.newTab().setText("Historial"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_last_month));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_current_month));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_history));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
 
             case android.R.id.home:
-                //abrir menu contextual
+                //open menu contextual
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
@@ -182,9 +182,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Start of Month");
+        builder.setTitle(R.string.Main_Act_Dialog_Start_of_Month);
         builder.setIcon(R.drawable.ic_start_month);
-        builder.setMessage("Define the day the app will reset data for new month:");
+        builder.setMessage(R.string.Main_Act_Dialog_Start_of_Month_Message);
 
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_start_month_item, null);
         builder.setView(viewInflated);
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startMonthPicker.setValue(settingsData.getStartMonth());
 
 
-        builder.setPositiveButton("SET", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.Main_Act_Dialog_Start_of_Month_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.setCheckedItem(R.id.menu_none);
 
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.Main_Act_Dialog_Start_of_Month_negative_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //no action required
@@ -220,9 +220,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Set Currency");
+        builder.setTitle(R.string.Main_Act_Dialog_Set_Currency_Title);
         builder.setIcon(R.drawable.ic_currency);
-        builder.setMessage("Define currency the app will use:");
+        builder.setMessage(R.string.Main_Act_Dialog_Set_Currency_Message);
 
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_currency_item, null);
         builder.setView(viewInflated);
@@ -230,21 +230,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currencyEditText = (EditText) viewInflated.findViewById(R.id.currencyInput);
         currencyEditText.setText(settingsData.getCurrency());
 
-        builder.setPositiveButton("SET", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.Main_Act_Dialog_Set_Currency_positive_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 String currency = currencyEditText.getText().toString().trim();
 
                 if (currency.isEmpty()){
-                    Toast.makeText(MainActivity.this, "Currency can not be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.Main_Act_Dialog_Set_Currency_error_empty_currency, Toast.LENGTH_SHORT).show();
                 } else {
                     setCurrency(currency);
                     navigationView.setCheckedItem(R.id.menu_none);
                 }
 
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.Main_Act_Dialog_Set_Currency_negative_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //no action required
@@ -268,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         settingsData.setStartMonth(value);
         realm.copyToRealmOrUpdate(settingsData);
         realm.commitTransaction();
-
     }
 
     private void setCurrency(String currency){

@@ -23,6 +23,7 @@ import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -57,7 +58,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         realm = Realm.getDefaultInstance();
 
         //get current month
-        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo("currentMonth", true).findFirst();
+        CategoryMonth categoryMonth = realm.where(CategoryMonth.class).equalTo(MyApplication.CURRENT_MONTH_COLUMN, true).findFirst();
 
         if (categoryMonth != null) {
             categories = categoryMonth.getCategoryList();
@@ -86,7 +87,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
                     public void onItemClick(Category category, int position) {
 
                         Intent intent = new Intent(getContext(), CategoryDetailedActivity.class);
-                        intent.putExtra("categoryID", categories.get(position).getId());
+                        intent.putExtra(CategoryDetailedActivity.CATEGORY_ID_EXTRA, categories.get(position).getId());
                         startActivity(intent);
 
                     }
@@ -185,12 +186,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             CategoryDialogFragment categoryDialogFragment = new CategoryDialogFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putString("title", "Create new Category");
-            bundle.putInt("type", CategoryDialogFragment.CREATION_TYPE);
+            bundle.putString(CategoryDialogFragment.TITLE_EXTRA, getString(R.string.Main_Fragment_fab_dialog_title_create_category));
+            bundle.putInt(CategoryDialogFragment.TYPE_EXTRA, CategoryDialogFragment.CREATION_TYPE);
             categoryDialogFragment.setArguments(bundle);
 
             categoryDialogFragment.setTargetFragment(this, RESULT_CREATE_CATEGORY_DIALOG);
-            categoryDialogFragment.show(getFragmentManager(), "categoryDialogFragment");
+            categoryDialogFragment.show(getFragmentManager(), CategoryDialogFragment.CATEGORY_DIALOG_FRAGMENT_EXTRA);
         }
     }
 
@@ -202,16 +203,16 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
             if (RESULT_CREATE_CATEGORY_DIALOG == requestCode) {
 
-                if (data.getExtras().containsKey("Category")) {
+                if (data.getExtras().containsKey(CategoryDialogFragment.CATEGORY_EXTRA)) {
 
-                    Category category = data.getExtras().getParcelable("Category");
+                    Category category = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_EXTRA);
                     addNewCategory(category);
 
                 }
             } else if (RecyclerViewAdapter.RESULT_EDIT_CATEGORY_DIALOG == requestCode) {
 
-                Category categoryOld = data.getExtras().getParcelable("CategoryOld");
-                Category categoryNew = data.getExtras().getParcelable("CategoryNew");
+                Category categoryOld = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_OLD_EXTRA);
+                Category categoryNew = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_NEW_EXTRA);
                 editCategory(categoryOld, categoryNew);
             }
         }

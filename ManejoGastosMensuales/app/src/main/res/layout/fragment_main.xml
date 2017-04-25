@@ -23,7 +23,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/tvCurrency"
                 android:layout_toStartOf="@+id/tvCurrency"
-                android:text="Total"
+                android:text="@string/Main_fragment_total_label"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
             <TextView

@@ -19,9 +19,7 @@ import com.santamaria.manejogastosmensuales.Adapter.CategoryDetailedAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDetail;
 import com.santamaria.manejogastosmensuales.R;
-
-import java.util.LinkedList;
-import java.util.List;
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -32,6 +30,10 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
 
     private static final int DETAIL_CREATION = 100;
     private static final int DETAIL_EDITION = 101;
+
+    public static final String CATEGORY_ID_EXTRA = "categoryID";
+    public static final String CREATION_EXTRA = "CREATION";
+
     private ListView listViewDetail;
     private Toolbar myToolbar = null;
     private CategoryDetailedAdapter adapter;
@@ -62,8 +64,8 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
         listViewDetail = (ListView) findViewById(R.id.listViewDetail);
 
         Intent intent = getIntent();
-        categoryID = intent.getIntExtra("categoryID", -1);
-        boolean CREATION = intent.getBooleanExtra("CREATION", true);
+        categoryID = intent.getIntExtra(CATEGORY_ID_EXTRA, -1);
+        boolean CREATION = intent.getBooleanExtra(CREATION_EXTRA, true);
 
         fabAdd = (FloatingActionButton) findViewById(R.id.fabAddDetail);
         if (!CREATION) {
@@ -73,7 +75,7 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
         if (categoryID >= 0) {
             realm = Realm.getDefaultInstance();
 
-            category = realm.where(Category.class).equalTo("id", categoryID).findFirst();
+            category = realm.where(Category.class).equalTo(MyApplication.ID_COLUMN, categoryID).findFirst();
             category.addChangeListener(this);
             categoryDetailList = category.getCategoryDetailList();
 
@@ -117,9 +119,9 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
 
 
         if (alertType == DETAIL_CREATION) {
-            builder.setTitle("Create new category detail");
+            builder.setTitle(R.string.Category_Detailed_Act_Creation_title);
         } else {
-            builder.setTitle("Edit category detail");
+            builder.setTitle(R.string.Category_Detailed_Act_Edition_title);
             detailInput.setText(categoryDetail.getDetail());
             amountInput.setText(categoryDetail.getAmount() + "");
         }
@@ -164,14 +166,14 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
             String detail = detailInput.getText().toString().trim();
 
             if (detail.isEmpty()) {
-                detailInput.setError("Detail name should not be blank");
+                detailInput.setError(getString(R.string.Category_Detailed_Act_Error_detail_name_empty));
 
             } else {
 
                 String amount = amountInput.getText().toString().trim();
 
                 if (amount.isEmpty()) {
-                    amountInput.setError("Amount should not be blank");
+                    amountInput.setError(getString(R.string.Category_Detailed_Act_Error_detail_amount_empty));
 
                 } else {
 
@@ -183,23 +185,19 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
                     } else {
                         editCategoryDetail(categoryDetail, detail, amountF);
                         alertDialog.dismiss();
-
                     }
-
                 }
             }
 
         } else if (view.getId() == R.id.cancelButton){
             alertDialog.dismiss();
         }
-
     }
 
     @Override
     public void onChange(Category element) {
         adapter.notifyDataSetChanged();
     }
-
 
 //ContextMenu
 
@@ -228,9 +226,7 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
                 return true;
             default:
                 return super.onContextItemSelected(item);
-
         }
     }
-
     //End Context Menu
 }

@@ -19,6 +19,7 @@ import com.santamaria.manejogastosmensuales.Adapter.ListViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import java.util.Calendar;
 
@@ -57,13 +58,13 @@ public class HistoryItemFragment extends Fragment implements AdapterView.OnItemC
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            month = bundle.getInt("month");
-            year = bundle.getInt("year");
+            month = bundle.getInt(HistoryFragment.MONTH_BUNDLE_EXTRA);
+            year = bundle.getInt(HistoryFragment.YEAR_BUNDLE_EXTRA);
         }
 
             realm = realm.getDefaultInstance();
 
-            CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("year", year).findAll().where().equalTo("month", month).findFirst();
+            CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo(MyApplication.YEAR_COLUMN, year).findAll().where().equalTo(MyApplication.MONTH_COLUMN, month).findFirst();
 
             if (lastCategoryMonth != null) {
                 categories = lastCategoryMonth.getCategoryList();
@@ -95,8 +96,8 @@ public class HistoryItemFragment extends Fragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         Intent intent = new Intent(getContext(), CategoryDetailedActivity.class);
-        intent.putExtra("categoryID", categories.get(position).getId());
-        intent.putExtra("CREATION", false);
+        intent.putExtra(CategoryDetailedActivity.CATEGORY_ID_EXTRA, categories.get(position).getId());
+        intent.putExtra(CategoryDetailedActivity.CREATION_EXTRA, false);
         startActivity(intent);
 
     }

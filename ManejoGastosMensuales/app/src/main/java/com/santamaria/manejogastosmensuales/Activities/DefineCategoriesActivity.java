@@ -20,8 +20,6 @@ import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
 
-import java.util.Set;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -44,7 +42,7 @@ public class DefineCategoriesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_define_categories);
 
-        setTitle("  Define category list");
+        setTitle(getString(R.string.Define_Categories_Act_title));
 
         realm = Realm.getDefaultInstance();
         settingsData = MainActivity.settingsData;
@@ -88,11 +86,11 @@ public class DefineCategoriesActivity extends AppCompatActivity
 
         String positiveButtonText = "";
         if (dialogType == CREATE_CATEGORY) {
-            builder.setTitle("Create new Category");
-            positiveButtonText = "Add";
+            builder.setTitle(R.string.Define_Categories_Act_Dialog_title_create_category);
+            positiveButtonText = getString(R.string.Define_Categories_Act_Dialog_create_category_button_add);
         } else {
-            builder.setTitle("Edit Category");
-            positiveButtonText = "Update";
+            builder.setTitle(R.string.Define_Categories_Act_Dialog_title_edit_category);
+            positiveButtonText = getString(R.string.Define_Categories_Act_Dialog_edit_category_button_update);
             categoryNameInput.setText(categoryDefined.getCategoryName());
         }
 
@@ -103,7 +101,7 @@ public class DefineCategoriesActivity extends AppCompatActivity
                 String categoryName = categoryNameInput.getText().toString().trim();
 
                 if (categoryName.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Category name can not be empty value", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.Define_Categories_Act_Dialog_error_category_name_empty, Toast.LENGTH_SHORT).show();
                 } else {
                     if (dialogType == CREATE_CATEGORY) {
                         addNewCategory(categoryName);

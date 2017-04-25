@@ -10,6 +10,6 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:layout_margin="15dp"
-        android:hint="Category Name"/>
+        android:hint="@string/dialog_define_category_item_category_name_hint"/>
 
 </LinearLayout>

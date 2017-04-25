@@ -20,6 +20,7 @@ import com.santamaria.manejogastosmensuales.Adapter.ListViewAdapter;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,10 +49,10 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
 
         realm = realm.getDefaultInstance();
 
-        Number idNumber = realm.where(CategoryMonth.class).equalTo("currentMonth", false).findAll().where().max("id");
+        Number idNumber = realm.where(CategoryMonth.class).equalTo(MyApplication.CURRENT_MONTH_COLUMN, false).findAll().where().max(MyApplication.ID_COLUMN);
         CategoryMonth lastCategoryMonth = null;
         if (idNumber != null) {
-            lastCategoryMonth = realm.where(CategoryMonth.class).equalTo("id", idNumber.intValue()).findFirst();
+            lastCategoryMonth = realm.where(CategoryMonth.class).equalTo(MyApplication.ID_COLUMN, idNumber.intValue()).findFirst();
         }
 
         if (lastCategoryMonth != null) {
@@ -87,8 +88,8 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         Intent intent = new Intent(getContext(), CategoryDetailedActivity.class);
-        intent.putExtra("categoryID", categories.get(position).getId());
-        intent.putExtra("CREATION", false);
+        intent.putExtra(CategoryDetailedActivity.CATEGORY_ID_EXTRA, categories.get(position).getId());
+        intent.putExtra(CategoryDetailedActivity.CREATION_EXTRA, false);
         startActivity(intent);
 
     }

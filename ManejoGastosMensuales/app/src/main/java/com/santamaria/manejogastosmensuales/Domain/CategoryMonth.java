@@ -3,7 +3,6 @@ package com.santamaria.manejogastosmensuales.Domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.santamaria.manejogastosmensuales.Enumerator.Months;
 import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import java.util.Calendar;

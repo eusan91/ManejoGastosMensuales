@@ -1,7 +1,44 @@
 <resources>
     <string name="app_name">Manejo Gastos Mensuales</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_define_categories">DefineCategoriesActivity</string>
+    <string name="title_activity_define_categories">Define Categories Activity</string>
+    <string name="Category_Detailed_Act_Creation_title">Create new category detail</string>
+    <string name="Category_Detailed_Act_Edition_title">Edit category details</string>
+    <string name="Category_Detailed_Act_Error_detail_name_empty">Detail name should not be blank</string>
+    <string name="Category_Detailed_Act_Error_detail_amount_empty">Amount should not be blank</string>
+    <string name="Define_Categories_Act_title">Categories List Defined</string>
+    <string name="Define_Categories_Act_Dialog_title_create_category">Create new Category</string>
+    <string name="Define_Categories_Act_Dialog_title_edit_category">Edit Category</string>
+    <string name="Define_Categories_Act_Dialog_create_category_button_add">Add</string>
+    <string name="Define_Categories_Act_Dialog_edit_category_button_update">Update</string>
+    <string name="Define_Categories_Act_Dialog_error_category_name_empty">Category name can not be empty value</string>
+    <string name="Main_Act_last_month">Last Month</string>
+    <string name="Main_Act_current_month">Current Month</string>
+    <string name="Main_Act_history">History</string>
+    <string name="Main_Act_Dialog_Start_of_Month">Start of Month</string>
+    <string name="Main_Act_Dialog_Start_of_Month_Message">Define the day the app will reset data for new month:</string>
+    <string name="Main_Act_Dialog_Start_of_Month_positive_button">SET</string>
+    <string name="Main_Act_Dialog_Start_of_Month_negative_button">Cancel</string>
+    <string name="Main_Act_Dialog_Set_Currency_Title">Set Currency</string>
+    <string name="Main_Act_Dialog_Set_Currency_Message">Set the currency the app will use:</string>
+    <string name="Main_Act_Dialog_Set_Currency_negative_button">Cancel</string>
+    <string name="Main_Act_Dialog_Set_Currency_positive_button">SET</string>
+    <string name="Main_Act_Dialog_Set_Currency_error_empty_currency">Currency can not be empty</string>
+    <string name="Recycler_View_Dialog_Edit_Category_title">Edit Category</string>
+    <string name="Main_Fragment_fab_dialog_title_create_category">Create new Category</string>
+    <string name="Category_dialog_frag_positive_button_text_create">Create</string>
+    <string name="Category_dialog_frag_positive_button_text_update">Update</string>
+    <string name="Category_dialog_frag_error_category_name_empty">The name is required to create a new Category</string>
+    <string name="dialog_create_detail_input">Detail:</string>
+    <string name="dialog_create_detail_amount_Input">Amount:</string>
+    <string name="dialog_create_detail_Cancel">Cancel</string>
+    <string name="dialog_create_detail_Ok">Ok</string>
+    <string name="dialog_define_category_item_category_name_hint">Category Name</string>
+    <string name="fragment_history_month_label">Month</string>
+    <string name="fragment_history_year_label">Year</string>
+    <string name="fragment_history_current_month_in_progress">Current Month in progress...</string>
+    <string name="fragment_history_item_total_label">Total</string>
+    <string name="fragment_last_month_total_label">Total</string>
+    <string name="Main_fragment_total_label">Total</string>
+    <string name="nav_view_text_header">Monthly Management Expenses</string>
 </resources>

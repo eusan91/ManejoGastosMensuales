@@ -20,7 +20,7 @@
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Detail:"
+                android:text="@string/dialog_create_detail_input"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
             <EditText
@@ -40,7 +40,7 @@
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Amount:"
+                android:text="@string/dialog_create_detail_amount_Input"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
             <EditText
@@ -67,13 +67,13 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="start"
             android:padding="16dp"
-            android:text="Cancel"/>
+            android:text="@string/dialog_create_detail_Cancel"/>
 
         <TextView
             android:id="@+id/okButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ok"
+            android:text="@string/dialog_create_detail_Ok"
             android:layout_marginRight="16dp"
             android:padding="16dp"
             android:clickable="true"

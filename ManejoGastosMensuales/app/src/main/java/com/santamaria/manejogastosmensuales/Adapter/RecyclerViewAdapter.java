@@ -162,13 +162,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CategoryDialogFragment categoryDialogFragment = new CategoryDialogFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("title", "Edit Category " + category.getNombre());
-        bundle.putParcelable("category", category);
-        bundle.putInt("type", CategoryDialogFragment.EDITION_TYPE);
+        bundle.putString(CategoryDialogFragment.TITLE_EXTRA, context.getString(R.string.Recycler_View_Dialog_Edit_Category_title) + category.getNombre());
+        bundle.putParcelable(CategoryDialogFragment.CATEGORY_EXTRA, category);
+        bundle.putInt(CategoryDialogFragment.TYPE_EXTRA, CategoryDialogFragment.EDITION_TYPE);
         categoryDialogFragment.setArguments(bundle);
 
         categoryDialogFragment.setTargetFragment(fragment, RESULT_EDIT_CATEGORY_DIALOG);
-        categoryDialogFragment.show(fragment.getFragmentManager(), "categoryDialogFragment");
+        categoryDialogFragment.show(fragment.getFragmentManager(), CategoryDialogFragment.CATEGORY_DIALOG_FRAGMENT_EXTRA);
         
     }
 

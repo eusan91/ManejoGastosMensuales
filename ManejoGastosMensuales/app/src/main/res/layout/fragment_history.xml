@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:gravity="center"
-                android:text="Month"
+                android:text="@string/fragment_history_month_label"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu"/>
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:gravity="center"
-                android:text="Year"
+                android:text="@string/fragment_history_year_label"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu"/>
 
         </LinearLayout>
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Current Month in progress..."
+                android:text="@string/fragment_history_current_month_in_progress"
                 android:visibility="invisible"
                 android:textAppearance="?attr/textAppearanceLargePopupMenu"/>
         </FrameLayout>

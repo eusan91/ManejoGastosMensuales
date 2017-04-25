@@ -29,7 +29,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="12dp"
-            android:text="NombreCategoria"
+            android:hint="NombreCategoria"
             android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
         <TextView
