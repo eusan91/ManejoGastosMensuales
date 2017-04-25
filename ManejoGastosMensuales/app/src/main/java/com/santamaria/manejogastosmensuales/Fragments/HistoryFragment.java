@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 import io.realm.Realm;
 
-public class HistoryFragment extends Fragment implements NumberPicker.OnValueChangeListener{
+public class HistoryFragment extends Fragment implements NumberPicker.OnValueChangeListener {
 
 
     public static final String YEAR_BUNDLE_EXTRA = "year";
@@ -56,7 +56,7 @@ public class HistoryFragment extends Fragment implements NumberPicker.OnValueCha
         mMonthSpinner.setOnValueChangedListener(this);
         month = mMonthSpinner.getValue();
 
-                // year
+        // year
         year = Calendar.getInstance().get(Calendar.YEAR);
         mYearSpinner = (NumberPicker) view.findViewById(R.id.NumberPickerYear);
         mYearSpinner.setMinValue(2017);
@@ -69,7 +69,7 @@ public class HistoryFragment extends Fragment implements NumberPicker.OnValueCha
         mYearSpinner.setValue(Calendar.getInstance().get(Calendar.YEAR));
         mMonthSpinner.setValue(Calendar.getInstance().get(Calendar.MONTH));
 
-        onValueChange(mMonthSpinner, 0 ,0);
+        onValueChange(mMonthSpinner, 0, 0);
 
         return view;
     }
@@ -78,30 +78,27 @@ public class HistoryFragment extends Fragment implements NumberPicker.OnValueCha
     public void onValueChange(NumberPicker numberPicker, int i, int i1) {
 
 
-        if (numberPicker.getId() == R.id.NumberPickerMonth){
-            month = numberPicker.getValue()+1;
+        if (numberPicker.getId() == R.id.NumberPickerMonth) {
+            month = numberPicker.getValue() + 1;
         } else {
             year = numberPicker.getValue();
         }
 
-        if (month == (int)Calendar.getInstance().get(Calendar.MONTH)+1
-                && year == (int)Calendar.getInstance().get(Calendar.YEAR) ) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(MONTH_BUNDLE_EXTRA, month);
+        bundle.putInt(YEAR_BUNDLE_EXTRA, year);
 
+        Fragment fragment = new HistoryItemFragment();
+        fragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.contentFrame, fragment)
+                .commit();
+
+        if (month == (int) Calendar.getInstance().get(Calendar.MONTH) + 1
+                && year == (int) Calendar.getInstance().get(Calendar.YEAR)) {
             currentMonthSelected.setVisibility(View.VISIBLE);
-
         } else {
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(MONTH_BUNDLE_EXTRA, month);
-            bundle.putInt(YEAR_BUNDLE_EXTRA, year);
-
-            Fragment fragment = new HistoryItemFragment();
-            fragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().
-                    beginTransaction().
-                    replace(R.id.contentFrame, fragment)
-                    .commit();
-
             currentMonthSelected.setVisibility(View.INVISIBLE);
         }
 

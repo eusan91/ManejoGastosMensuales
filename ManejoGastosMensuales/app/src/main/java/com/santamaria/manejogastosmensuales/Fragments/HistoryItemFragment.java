@@ -61,33 +61,42 @@ public class HistoryItemFragment extends Fragment implements AdapterView.OnItemC
             month = bundle.getInt(HistoryFragment.MONTH_BUNDLE_EXTRA);
             year = bundle.getInt(HistoryFragment.YEAR_BUNDLE_EXTRA);
         }
+        CategoryMonth lastCategoryMonth;
+
+        if (month == (int) Calendar.getInstance().get(Calendar.MONTH) + 1
+                && year == (int) Calendar.getInstance().get(Calendar.YEAR)) {
+
+            categories = null;
+
+        } else {
 
             realm = realm.getDefaultInstance();
 
-            CategoryMonth lastCategoryMonth = realm.where(CategoryMonth.class).equalTo(MyApplication.YEAR_COLUMN, year).findAll().where().equalTo(MyApplication.MONTH_COLUMN, month).findFirst();
+            lastCategoryMonth = realm.where(CategoryMonth.class).equalTo(MyApplication.YEAR_COLUMN, year).findAll().where().equalTo(MyApplication.MONTH_COLUMN, month).findFirst();
 
             if (lastCategoryMonth != null) {
                 categories = lastCategoryMonth.getCategoryList();
             }
+        }
 
-            listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
-            listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
-            listViewCategorias.setAdapter(listViewAdapter);
-            listViewCategorias.setOnItemClickListener(this);
+        listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
+        listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
+        listViewCategorias.setAdapter(listViewAdapter);
+        listViewCategorias.setOnItemClickListener(this);
 
-            tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
-            tvCurrency.setText(MainActivity.settingsData.getCurrency());
+        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvCurrency.setText(MainActivity.settingsData.getCurrency());
 
-            tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
 
-            if (categories != null && categories.size() > 0) {
-                updateGrandtotal();
-            } else {
+        if (categories != null && categories.size() > 0) {
+            updateGrandtotal();
+        } else {
 
-                RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
-                relativeLayout.setVisibility(View.INVISIBLE);
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
+            relativeLayout.setVisibility(View.INVISIBLE);
 
-            }
+        }
 
         return view;
     }
