@@ -1,6 +1,7 @@
 package com.santamaria.manejogastosmensuales.app;
 
 import android.app.Application;
+import android.content.res.Configuration;
 
 import com.facebook.stetho.Stetho;
 import com.santamaria.manejogastosmensuales.Domain.Category;
@@ -11,6 +12,7 @@ import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
@@ -33,6 +35,8 @@ public class MyApplication extends Application {
     public static String CURRENT_MONTH_COLUMN = "currentMonth";
     public static String YEAR_COLUMN = "year";
     public static String MONTH_COLUMN = "month";
+    public static String ENGLISH_LANG = "english";
+    public static String SPANISH_LANG = "spanish";
 
     @Override
     public void onCreate() {
@@ -49,7 +53,19 @@ public class MyApplication extends Application {
         SettingsData settingsData = realm.where(SettingsData.class).findFirst();
 
         if (settingsData == null) {
-            initSettings(realm, new SettingsData(1, null, "$"));
+            initSettings(realm, new SettingsData(1, null, "$", ENGLISH_LANG));
+        } else {
+            //change the language
+            if (settingsData.getLanguage().compareTo(SPANISH_LANG)==0){
+                Configuration config = new Configuration();
+                config.setLocale(new Locale("es","Es"));
+                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+            } else {
+                Configuration config = new Configuration();
+                config.setLocale(Locale.ENGLISH);
+                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+            }
+
         }
 
         loadData(realm, settingsData);

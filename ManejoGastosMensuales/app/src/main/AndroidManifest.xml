@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.santamaria.manejogastosmensuales">
 
-    <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="true" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"

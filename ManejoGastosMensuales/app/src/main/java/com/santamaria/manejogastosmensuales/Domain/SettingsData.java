@@ -17,15 +17,17 @@ public class SettingsData extends RealmObject {
     private int startMonth;
     private RealmList<CategoryDefined> categoryDefinedList;
     private String currency;
+    private String language;
 
     public SettingsData() {
 
     }
 
-    public SettingsData(int startMonth, RealmList<CategoryDefined> categoryDefinedList, String currency) {
+    public SettingsData(int startMonth, RealmList<CategoryDefined> categoryDefinedList, String currency, String language) {
         this.startMonth = startMonth;
         this.categoryDefinedList = categoryDefinedList;
         this.currency = currency;
+        this.language = language;
     }
 
     public SettingsData(int startMonth) {
@@ -54,5 +56,13 @@ public class SettingsData extends RealmObject {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

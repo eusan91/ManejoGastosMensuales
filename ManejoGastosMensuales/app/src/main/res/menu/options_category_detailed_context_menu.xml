@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/editDetail"
-        android:title="Edit Detail" />
+        android:title="@string/option_category_detail_context_menu_edit_detail" />
 
     <item android:id="@+id/deleteDetail"
-        android:title="Delete Detail" />
+        android:title="@string/option_category_detail_context_menu_delete_detail" />
 
 </menu>

@@ -2,6 +2,8 @@ package com.santamaria.manejogastosmensuales.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -13,19 +15,23 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Adapter.PagerAdapter;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
+import com.santamaria.manejogastosmensuales.app.MyApplication;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -40,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView = null;
     private NumberPicker startMonthPicker = null;
     private EditText currencyEditText = null;
+    private RadioButton radioEnglish = null;
+    private RadioButton radioSpanish = null;
+
     PagerAdapter pagerAdapter;
 
     public static SettingsData settingsData;
@@ -79,18 +88,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         settingsData = realm.where(SettingsData.class).findFirst();
     }
 
-    private void setToolbar(){
+    private void setToolbar() {
         setSupportActionBar(myToolbar);
     }
 
-    private void setTabLayout(){
+    private void setTabLayout() {
 
         tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_last_month));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_current_month));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.Main_Act_history));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -112,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void setViewPager(){
+    private void setViewPager() {
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -130,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.exit_menu_item:
                 this.finish();
@@ -152,15 +161,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         boolean closeNavDrawer = false;
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.defineCategories:
                 closeNavDrawer = true;
                 Intent intent = new Intent(this, DefineCategoriesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 break;
 
-            case  R.id.startMonth:
+            case R.id.startMonth:
                 closeNavDrawer = true;
                 createAlertDialogStartMonth();
                 break;
@@ -169,13 +178,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 closeNavDrawer = true;
                 createAlertDialogCurrency();
                 break;
+
+            case R.id.language:
+                closeNavDrawer = true;
+                createAlertDialogLanguage();
+                break;
         }
 
-        if (closeNavDrawer){
+        if (closeNavDrawer) {
             drawerLayout.closeDrawers();
         }
 
         return closeNavDrawer;
+    }
+
+    private void restartApp() {
+        Intent intent1 = getIntent();
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent1);
     }
 
     private void createAlertDialogStartMonth() {
@@ -236,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 String currency = currencyEditText.getText().toString().trim();
 
-                if (currency.isEmpty()){
+                if (currency.isEmpty()) {
                     Toast.makeText(MainActivity.this, R.string.Main_Act_Dialog_Set_Currency_error_empty_currency, Toast.LENGTH_SHORT).show();
                 } else {
                     setCurrency(currency);
@@ -255,6 +276,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.create().show();
     }
 
+    private void createAlertDialogLanguage() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//R.string.Main_Act_Dialog_Set_Currency_Title
+        builder.setTitle(R.string.Main_Act_Dialog_Set_Language_Title);
+        builder.setIcon(R.drawable.ic_language);
+        builder.setMessage(R.string.Main_act_Dialog_set_Language_Message);
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_language_item, null);
+        builder.setView(viewInflated);
+
+        radioEnglish = (RadioButton) viewInflated.findViewById(R.id.english);
+        radioSpanish = (RadioButton) viewInflated.findViewById(R.id.spanish);
+
+        if (settingsData.getLanguage().compareTo(MyApplication.ENGLISH_LANG) == 0) {
+            radioEnglish.setChecked(true);
+        } else {
+            radioSpanish.setChecked(true);
+        }
+
+        //get the one from the system and check
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                boolean englishState = radioEnglish.isChecked();
+                boolean spanishState = radioSpanish.isChecked();
+
+                if (englishState && settingsData.getLanguage().compareTo(MyApplication.ENGLISH_LANG) != 0) {
+
+                    updateLang(Locale.ENGLISH);
+                    restartApp();
+
+                } else if (spanishState && settingsData.getLanguage().compareTo(MyApplication.SPANISH_LANG) != 0) {
+
+                    updateLang(new Locale("es", "ES"));
+                    restartApp();
+
+                }
+
+
+            }
+        }).setNegativeButton(R.string.Main_Act_Dialog_Set_Currency_negative_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //no action required
+                navigationView.setCheckedItem(R.id.menu_none);
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void updateLang(Locale locale) {
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        String newLang = "";
+
+        if (locale == Locale.ENGLISH){
+            newLang = MyApplication.ENGLISH_LANG;
+        } else {
+            newLang = MyApplication.SPANISH_LANG;
+        }
+
+        realm.beginTransaction();
+        settingsData.setLanguage(newLang);
+        realm.copyToRealmOrUpdate(settingsData);
+        realm.commitTransaction();
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -262,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.menu_none);
     }
 
-    private void setStartOfMonth(int value){
+    private void setStartOfMonth(int value) {
 
         realm.beginTransaction();
         settingsData.setStartMonth(value);
@@ -270,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         realm.commitTransaction();
     }
 
-    private void setCurrency(String currency){
+    private void setCurrency(String currency) {
 
         realm.beginTransaction();
         settingsData.setCurrency(currency);
@@ -278,12 +372,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         realm.commitTransaction();
 
         //restart app to update currency textViews
-        Intent intent = getIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        finish();
-        startActivity(intent);
+        restartApp();
     }
 
     @Override
-    public void onChange(SettingsData element) {}
+    public void onChange(SettingsData element) {
+    }
 }

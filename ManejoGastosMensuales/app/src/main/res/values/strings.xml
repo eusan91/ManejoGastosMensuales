@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Manejo Gastos Mensuales</string>
+    <string name="app_name">Monthly Management Expenses</string>
 
     <string name="title_activity_define_categories">Define Categories Activity</string>
     <string name="Category_Detailed_Act_Creation_title">Create new category detail</string>
@@ -42,4 +42,19 @@
     <string name="Main_fragment_total_label">Total</string>
     <string name="nav_view_text_header">Monthly Management Expenses</string>
     <string name="dialog_create_category_color_label">Select a background color:</string>
+    <string name="dialog_Create_category_name_hint">Category Name</string>
+    <string name="dialog_color_picker_title">Choose color</string>
+    <string name="dialog_color_picker_cancel">cancel</string>
+    <string name="dialog_color_picker_ok">ok</string>
+    <string name="exit">Exit</string>
+    <string name="nav_opt_create_categories">Create Categories</string>
+    <string name="nav_opt_define_start_of_month">Define start of Month</string>
+    <string name="nav_opt_set_currency">Set currency</string>
+    <string name="nav_opt_set_language">Set language</string>
+    <string name="option_card_view_context_menu_edit_category">Edit Category</string>
+    <string name="option_card_view_context_menu_delete_category">Delete Category</string>
+    <string name="option_category_detail_context_menu_edit_detail">Edit Detail</string>
+    <string name="option_category_detail_context_menu_delete_detail">Delete Detail</string>
+    <string name="Main_Act_Dialog_Set_Language_Title">Language</string>
+    <string name="Main_act_Dialog_set_Language_Message">Select your language:</string>
 </resources>

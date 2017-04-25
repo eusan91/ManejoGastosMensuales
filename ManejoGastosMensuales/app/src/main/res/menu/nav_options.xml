@@ -6,17 +6,22 @@
         <item
             android:id="@+id/defineCategories"
             android:icon="@drawable/ic_create_categories"
-            android:title="Define Categories"/>
+            android:title="@string/nav_opt_create_categories"/>
 
         <item
             android:id="@+id/startMonth"
             android:icon="@drawable/ic_start_month"
-            android:title="Define start of Month"/>
+            android:title="@string/nav_opt_define_start_of_month"/>
 
         <item
-            android:id="@+id/currency"
-            android:icon="@drawable/ic_currency"
-            android:title="Set currency"/>
+        android:id="@+id/currency"
+        android:icon="@drawable/ic_currency"
+        android:title="@string/nav_opt_set_currency"/>
+
+        <item
+            android:id="@+id/language"
+            android:icon="@drawable/ic_language"
+            android:title="@string/nav_opt_set_language"/>
 
         <item
             android:id="@+id/menu_none"

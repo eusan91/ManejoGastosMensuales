@@ -141,7 +141,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
         ColorPickerDialogBuilder
                 .with(getContext())
-                .setTitle("Choose color")
+                .setTitle(getString(R.string.dialog_color_picker_title))
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
                 .setOnColorSelectedListener(new OnColorSelectedListener() {
@@ -150,13 +150,13 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
                         //Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setPositiveButton("ok", new ColorPickerClickListener() {
+                .setPositiveButton(getString(R.string.dialog_color_picker_ok), new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                         selectedColorR = selectedColor;
                     }
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dialog_color_picker_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
