@@ -38,7 +38,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -53,9 +54,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="1dip"
                     android:layout_marginStart="1dip"
-                    android:focusable="true"
                     android:descendantFocusability="blocksDescendants"
-                    android:focusableInTouchMode="true" />
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleX="1.5"
+                    android:scaleY="1.2"
+                    android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
             </LinearLayout>
 
@@ -73,6 +77,8 @@
                     android:layout_marginEnd="1dip"
                     android:layout_marginStart="1dip"
                     android:focusable="true"
+                    android:scaleX="1.5"
+                    android:scaleY="1.2"
                     android:descendantFocusability="blocksDescendants"
                     android:focusableInTouchMode="true" />
 
@@ -98,8 +104,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/fragment_history_current_month_in_progress"
-                android:visibility="invisible"
-                android:textAppearance="?attr/textAppearanceLargePopupMenu"/>
+                android:textSize="19sp"
+                android:visibility="invisible" />
         </FrameLayout>
 
 

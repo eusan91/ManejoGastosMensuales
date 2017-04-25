@@ -49,8 +49,8 @@
     <string name="exit">Salir</string>
     <string name="nav_opt_create_categories">Crer Categorias</string>
     <string name="nav_opt_define_start_of_month">Establecer inicio del mes</string>
-    <string name="nav_opt_set_currency">Definir moneda</string>
-    <string name="nav_opt_set_language">Elegir lenguaje</string>
+    <string name="nav_opt_set_currency">Definir Moneda</string>
+    <string name="nav_opt_set_language">Elegir Idioma</string>
     <string name="option_card_view_context_menu_edit_category">Editar Categoria</string>
     <string name="option_card_view_context_menu_delete_category">Borrar Categoria</string>
     <string name="option_category_detail_context_menu_edit_detail">Editar Detalle</string>

@@ -14,49 +14,62 @@
     <FrameLayout
         android:id="@+id/imageViewCategory"
         android:layout_width="match_parent"
-        android:layout_height="70dp"/>
+        android:layout_height="70dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_gravity="bottom">
 
-        <TextView
-            android:id="@+id/tvCategoryName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/currency"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="12dp"
-            android:hint="NombreCategoria"
-            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@+id/Linear2">
 
-        <TextView
-            android:id="@+id/currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvValorCantidad"
-            android:layout_alignBottom="@+id/tvValorCantidad"
-            android:layout_gravity="right|bottom"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_toLeftOf="@+id/tvValorCantidad"
-            android:layout_toStartOf="@+id/tvValorCantidad"
-            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+            <TextView
+                android:id="@+id/tvCategoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/currency"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="12dp"
+                android:hint="NombreCategoria"
+                android:lines="1"
+                android:textAppearance="?attr/textAppearanceLargePopupMenu" />
 
-        <TextView
-            android:id="@+id/tvValorCantidad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:hint="0.0"
-            android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/Linear2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@+id/tvValorCantidad"
+                android:layout_toStartOf="@+id/tvValorCantidad"
+                android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+
+            <TextView
+                android:id="@+id/tvValorCantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:hint="0.0"
+                android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+
+        </LinearLayout>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
