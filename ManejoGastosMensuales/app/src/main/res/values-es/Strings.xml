@@ -47,7 +47,7 @@
     <string name="dialog_color_picker_cancel">Cancelar</string>
     <string name="dialog_color_picker_ok">OK</string>
     <string name="exit">Salir</string>
-    <string name="nav_opt_create_categories">Crer Categorias</string>
+    <string name="nav_opt_create_categories">Crear Categorias</string>
     <string name="nav_opt_define_start_of_month">Establecer inicio del mes</string>
     <string name="nav_opt_set_currency">Definir Moneda</string>
     <string name="nav_opt_set_language">Elegir Idioma</string>
