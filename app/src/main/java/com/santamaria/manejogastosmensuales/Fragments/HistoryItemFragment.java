@@ -4,7 +4,6 @@ package com.santamaria.manejogastosmensuales.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,21 +78,21 @@ public class HistoryItemFragment extends Fragment implements AdapterView.OnItemC
             }
         }
 
-        listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
+        listViewCategorias = view.findViewById(R.id.ListViewCategorias);
         listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
         listViewCategorias.setAdapter(listViewAdapter);
         listViewCategorias.setOnItemClickListener(this);
 
-        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvCurrency = view.findViewById(R.id.tvCurrency);
         tvCurrency.setText(MainActivity.settingsData.getCurrency());
 
-        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+        tvTotal1 = view.findViewById(R.id.tvTotalTotal);
 
         if (categories != null && categories.size() > 0) {
             updateGrandtotal();
         } else {
 
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
+            RelativeLayout relativeLayout = view.findViewById(R.id.relativeLayoutExternal);
             relativeLayout.setVisibility(View.INVISIBLE);
 
         }

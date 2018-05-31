@@ -53,8 +53,8 @@ public class CategoryDefinedAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(layout, null);
 
-            viewHolder.categoryName = (TextView) view.findViewById(R.id.textViewCategoryDefined);
-            viewHolder.LinearColorLayout = (LinearLayout) view.findViewById(R.id.LinearColorBackground);
+            viewHolder.categoryName = view.findViewById(R.id.textViewCategoryDefined);
+            viewHolder.LinearColorLayout = view.findViewById(R.id.LinearColorBackground);
             view.setTag(viewHolder);
 
         } else {

@@ -56,9 +56,9 @@ public class ListViewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(this.context).inflate(layout, null);
 
             holder = new ViewHolder();
-            holder.categoryName = (TextView) convertView.findViewById(R.id.tvCategoryName);
-            holder.total= (TextView) convertView.findViewById(R.id.tvValorCantidad);
-            holder.frameColorLayout = (FrameLayout) convertView.findViewById(R.id.imageViewCategory);
+            holder.categoryName = convertView.findViewById(R.id.tvCategoryName);
+            holder.total= convertView.findViewById(R.id.tvValorCantidad);
+            holder.frameColorLayout = convertView.findViewById(R.id.imageViewCategory);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -77,7 +77,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
 
-    static class ViewHolder {
+    private class ViewHolder {
 
         private TextView categoryName;
         private TextView total;

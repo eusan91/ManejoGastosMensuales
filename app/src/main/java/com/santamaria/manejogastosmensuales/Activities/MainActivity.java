@@ -3,19 +3,16 @@ package com.santamaria.manejogastosmensuales.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +27,6 @@ import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
 import com.santamaria.manejogastosmensuales.app.MyApplication;
 
-import java.util.Calendar;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -64,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //load settings
         loadSettings();
 
-        myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        navigationView = (NavigationView) findViewById(R.id.navView);
+        myToolbar = findViewById(R.id.toolbar);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navView);
         navigationView.setNavigationItemSelectedListener(this);
 
         setToolbar();
@@ -76,8 +72,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setViewPager();
 
         //habilitar el icono
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         //Select the second tab as default one.
         tabLayout.getTabAt(1).select();
@@ -210,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_start_month_item, null);
         builder.setView(viewInflated);
 
-        startMonthPicker = (NumberPicker) viewInflated.findViewById(R.id.NumberPickerDay);
+        startMonthPicker = viewInflated.findViewById(R.id.NumberPickerDay);
         startMonthPicker.setMinValue(1);
         startMonthPicker.setMaxValue(31);
         startMonthPicker.setValue(settingsData.getStartMonth());
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_currency_item, null);
         builder.setView(viewInflated);
 
-        currencyEditText = (EditText) viewInflated.findViewById(R.id.currencyInput);
+        currencyEditText = viewInflated.findViewById(R.id.currencyInput);
         currencyEditText.setText(settingsData.getCurrency());
 
         builder.setPositiveButton(R.string.Main_Act_Dialog_Set_Currency_positive_button, new DialogInterface.OnClickListener() {
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void createAlertDialogLanguage() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//R.string.Main_Act_Dialog_Set_Currency_Title
+
         builder.setTitle(R.string.Main_Act_Dialog_Set_Language_Title);
         builder.setIcon(R.drawable.ic_language);
         builder.setMessage(R.string.Main_act_Dialog_set_Language_Message);
@@ -287,8 +285,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_language_item, null);
         builder.setView(viewInflated);
 
-        radioEnglish = (RadioButton) viewInflated.findViewById(R.id.english);
-        radioSpanish = (RadioButton) viewInflated.findViewById(R.id.spanish);
+        radioEnglish = viewInflated.findViewById(R.id.english);
+        radioSpanish = viewInflated.findViewById(R.id.spanish);
 
         if (settingsData.getLanguage().compareTo(MyApplication.ENGLISH_LANG) == 0) {
             radioEnglish.setChecked(true);
@@ -335,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         config.setLocale(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
-        String newLang = "";
+        String newLang;
 
         if (locale == Locale.ENGLISH){
             newLang = MyApplication.ENGLISH_LANG;

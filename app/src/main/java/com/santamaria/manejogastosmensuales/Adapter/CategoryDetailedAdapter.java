@@ -11,11 +11,8 @@ import com.santamaria.manejogastosmensuales.Activities.MainActivity;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDetail;
 import com.santamaria.manejogastosmensuales.R;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by santamae on 4/21/2017.
@@ -63,10 +60,10 @@ public class CategoryDetailedAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(layout, null);
 
-            viewHolder.detail = (TextView) view.findViewById(R.id.detail);
-            viewHolder.date = (TextView) view.findViewById(R.id.date);
-            viewHolder.currency = (TextView) view.findViewById(R.id.currency);
-            viewHolder.amount = (TextView) view.findViewById(R.id.amount);
+            viewHolder.detail = view.findViewById(R.id.detail);
+            viewHolder.date = view.findViewById(R.id.date);
+            viewHolder.currency = view.findViewById(R.id.currency);
+            viewHolder.amount = view.findViewById(R.id.amount);
 
             view.setTag(viewHolder);
 
@@ -86,7 +83,7 @@ public class CategoryDetailedAdapter extends BaseAdapter {
         return view;
     }
 
-    static class ViewHolder {
+    private class ViewHolder {
 
         private TextView detail;
         private TextView date;

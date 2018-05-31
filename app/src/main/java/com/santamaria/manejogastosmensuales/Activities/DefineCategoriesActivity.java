@@ -1,7 +1,6 @@
 package com.santamaria.manejogastosmensuales.Activities;
 
 import android.content.DialogInterface;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -56,14 +55,14 @@ public class DefineCategoriesActivity extends AppCompatActivity
         categoryDefinedRealmList = settingsData.getCategoryDefinedList();
         categoryDefinedRealmList.addChangeListener(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listView = (ListView) findViewById(R.id.listviewDefineCategories);
+        listView = findViewById(R.id.listviewDefineCategories);
         adapter = new CategoryDefinedAdapter(this, categoryDefinedRealmList, R.layout.listview_category_defined_item);
         listView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,8 +75,9 @@ public class DefineCategoriesActivity extends AppCompatActivity
 
 
         //usado para definir el icono en el toolbar
-        getSupportActionBar().setIcon(R.drawable.ic_create_categories_dark);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setIcon(R.drawable.ic_create_categories_dark);
+        }
         //set context menu to listview
         registerForContextMenu(listView);
     }
@@ -89,8 +89,8 @@ public class DefineCategoriesActivity extends AppCompatActivity
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_define_category_item, null);
         builder.setView(viewInflated);
 
-        categoryNameInput = (EditText) viewInflated.findViewById(R.id.categoryNameDefinedInput);
-        ImageView imageViewColors = (ImageView) viewInflated.findViewById(R.id.imageViewColors);
+        categoryNameInput = viewInflated.findViewById(R.id.categoryNameDefinedInput);
+        ImageView imageViewColors = viewInflated.findViewById(R.id.imageViewColors);
         imageViewColors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +113,6 @@ public class DefineCategoriesActivity extends AppCompatActivity
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 String categoryName = categoryNameInput.getText().toString().trim();
-                int color = 0;
                 if (categoryName.isEmpty()) {
                     Toast.makeText(getApplicationContext(), R.string.Define_Categories_Act_Dialog_error_category_name_empty, Toast.LENGTH_SHORT).show();
                 } else {

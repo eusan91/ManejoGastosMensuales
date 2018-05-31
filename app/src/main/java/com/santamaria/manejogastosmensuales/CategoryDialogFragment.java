@@ -50,7 +50,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
         if (bundle != null) {
 
-            if (!bundle.getString(TITLE_EXTRA).isEmpty()) {
+            if (bundle.getString(TITLE_EXTRA) != null && !bundle.getString(TITLE_EXTRA).isEmpty()) {
                 title = bundle.getString(TITLE_EXTRA);
             }
 
@@ -75,8 +75,8 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
         View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_category, null);
         builder.setView(viewInflated);
 
-        final EditText categoryNameInput = (EditText) viewInflated.findViewById(R.id.categoryNameInput);
-        final ImageView imageViewColors = (ImageView) viewInflated.findViewById(R.id.imageViewColors);
+        final EditText categoryNameInput = viewInflated.findViewById(R.id.categoryNameInput);
+        final ImageView imageViewColors = viewInflated.findViewById(R.id.imageViewColors);
 
         imageViewColors.setOnClickListener(this);
 
@@ -89,7 +89,7 @@ public class CategoryDialogFragment extends DialogFragment implements View.OnCli
 
                 if (!categoryName.isEmpty()) {
 
-                    Category categoryTemp = null;
+                    Category categoryTemp;
 
                     categoryTemp = new Category(categoryName, selectedColorR);
 

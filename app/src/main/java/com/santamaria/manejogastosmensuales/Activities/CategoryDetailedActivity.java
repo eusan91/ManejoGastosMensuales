@@ -57,17 +57,17 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_detailed);
 
-        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.toolbar);
 
         setToolbar();
 
-        listViewDetail = (ListView) findViewById(R.id.listViewDetail);
+        listViewDetail = findViewById(R.id.listViewDetail);
 
         Intent intent = getIntent();
         categoryID = intent.getIntExtra(CATEGORY_ID_EXTRA, -1);
         boolean CREATION = intent.getBooleanExtra(CREATION_EXTRA, true);
 
-        fabAdd = (FloatingActionButton) findViewById(R.id.fabAddDetail);
+        fabAdd = findViewById(R.id.fabAddDetail);
         if (!CREATION) {
             fabAdd.hide();
         }
@@ -108,15 +108,14 @@ public class CategoryDetailedActivity extends AppCompatActivity implements View.
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_detail, null);
         builder.setView(viewInflated);
 
-        detailInput = (EditText) viewInflated.findViewById(R.id.newDetail);
-        amountInput = (EditText) viewInflated.findViewById(R.id.newAmount);
-        okButton = (TextView) viewInflated.findViewById(R.id.okButton);
+        detailInput = viewInflated.findViewById(R.id.newDetail);
+        amountInput = viewInflated.findViewById(R.id.newAmount);
+        okButton = viewInflated.findViewById(R.id.okButton);
         okButton.setOnClickListener(this);
         okButton.setTag(alertType); // --> this way we can identify what to do in the button action
 
-        cancelButton = (TextView) viewInflated.findViewById(R.id.cancelButton);
+        cancelButton = viewInflated.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
-
 
         if (alertType == DETAIL_CREATION) {
             builder.setTitle(R.string.Category_Detailed_Act_Creation_title);

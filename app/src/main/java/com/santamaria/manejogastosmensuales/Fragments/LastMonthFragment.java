@@ -1,10 +1,8 @@
 package com.santamaria.manejogastosmensuales.Fragments;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.santamaria.manejogastosmensuales.Activities.CategoryDetailedActivity;
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
@@ -21,9 +18,6 @@ import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Domain.CategoryMonth;
 import com.santamaria.manejogastosmensuales.R;
 import com.santamaria.manejogastosmensuales.app.MyApplication;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -62,21 +56,21 @@ public class LastMonthFragment extends Fragment implements AdapterView.OnItemCli
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_last_month, container, false);
 
-        listViewCategorias = (ListView) view.findViewById(R.id.ListViewCategorias);
+        listViewCategorias = view.findViewById(R.id.ListViewCategorias);
         listViewAdapter = new ListViewAdapter(categories, getContext(), R.layout.listview_cardview_item);
         listViewCategorias.setAdapter(listViewAdapter);
         listViewCategorias.setOnItemClickListener(this);
 
-        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvCurrency = view.findViewById(R.id.tvCurrency);
         tvCurrency.setText(MainActivity.settingsData.getCurrency());
 
-        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
+        tvTotal1 = view.findViewById(R.id.tvTotalTotal);
 
         if (categories != null && categories.size() > 0) {
             updateGrandtotal();
         } else {
 
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutExternal);
+            RelativeLayout relativeLayout = view.findViewById(R.id.relativeLayoutExternal);
             relativeLayout.setVisibility(View.INVISIBLE);
 
         }

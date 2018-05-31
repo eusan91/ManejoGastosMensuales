@@ -2,6 +2,7 @@ package com.santamaria.manejogastosmensuales.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -53,14 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.currency = MainActivity.settingsData.getCurrency();
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
 
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -90,10 +91,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(View itemView) {
             super(itemView);
 
-            this.categoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
-            this.total = (TextView) itemView.findViewById(R.id.tvValorCantidad);
-            this.frameColorLayout = (FrameLayout) itemView.findViewById(R.id.imageViewCategory);
-            this.currencyView = (TextView) itemView.findViewById(R.id.currency);
+            this.categoryName = itemView.findViewById(R.id.tvCategoryName);
+            this.total = itemView.findViewById(R.id.tvValorCantidad);
+            this.frameColorLayout = itemView.findViewById(R.id.imageViewCategory);
+            this.currencyView = itemView.findViewById(R.id.currency);
             itemView.setOnCreateContextMenuListener(this);
 
         }

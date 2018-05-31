@@ -77,7 +77,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        recyclerViewCategories = (RecyclerView) view.findViewById(R.id.recyclerViewCategorias);
+        recyclerViewCategories = view.findViewById(R.id.recyclerViewCategorias);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerViewAdapter = new RecyclerViewAdapter(categories, R.layout.recycler_cardview_item,
@@ -95,12 +95,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         recyclerViewCategories.setLayoutManager(recyclerViewLayoutManager);
         recyclerViewCategories.setAdapter(recyclerViewAdapter);
 
-        tvTotal1 = (TextView) view.findViewById(R.id.tvTotalTotal);
-        tvCurrency = (TextView) view.findViewById(R.id.tvCurrency);
+        tvTotal1 = view.findViewById(R.id.tvTotalTotal);
+        tvCurrency = view.findViewById(R.id.tvCurrency);
         tvCurrency.setText(MainActivity.settingsData.getCurrency());
 
         //fab action
-        fabAdd = (FloatingActionButton) view.findViewById(R.id.fabAddCategory);
+        fabAdd = view.findViewById(R.id.fabAddCategory);
 
         fabAdd.setOnClickListener(this);
 
@@ -190,7 +190,9 @@ public class MainFragment extends Fragment implements View.OnClickListener,
             categoryDialogFragment.setArguments(bundle);
 
             categoryDialogFragment.setTargetFragment(this, RESULT_CREATE_CATEGORY_DIALOG);
-            categoryDialogFragment.show(getFragmentManager(), CategoryDialogFragment.CATEGORY_DIALOG_FRAGMENT_EXTRA);
+            if (getFragmentManager() != null) {
+                categoryDialogFragment.show(getFragmentManager(), CategoryDialogFragment.CATEGORY_DIALOG_FRAGMENT_EXTRA);
+            }
         }
     }
 
@@ -202,7 +204,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,
 
             if (RESULT_CREATE_CATEGORY_DIALOG == requestCode) {
 
-                if (data.getExtras().containsKey(CategoryDialogFragment.CATEGORY_EXTRA)) {
+                if (data.getExtras() != null && data.getExtras().containsKey(CategoryDialogFragment.CATEGORY_EXTRA)) {
 
                     Category category = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_EXTRA);
                     addNewCategory(category);
@@ -210,9 +212,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,
                 }
             } else if (RecyclerViewAdapter.RESULT_EDIT_CATEGORY_DIALOG == requestCode) {
 
-                Category categoryOld = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_OLD_EXTRA);
-                Category categoryNew = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_NEW_EXTRA);
-                editCategory(categoryOld, categoryNew);
+                if (data.getExtras() != null) {
+                    Category categoryOld = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_OLD_EXTRA);
+                    Category categoryNew = data.getExtras().getParcelable(CategoryDialogFragment.CATEGORY_NEW_EXTRA);
+                    editCategory(categoryOld, categoryNew);
+                }
             }
         }
     }
@@ -240,6 +244,4 @@ public class MainFragment extends Fragment implements View.OnClickListener,
         updateGrandtotal();
 
     }
-
-
 }
