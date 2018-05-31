@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "424084981071",
+    "firebase_url": "https://manejogastosmensuales.firebaseio.com",
+    "project_id": "manejogastosmensuales",
+    "storage_bucket": "manejogastosmensuales.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424084981071:android:722a7d5013192917",
+        "android_client_info": {
+          "package_name": "com.santamaria.manejogastosmensuales"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424084981071-3fbqvu55067248ig0b8lja0inl1aag7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santamaria.manejogastosmensuales",
+            "certificate_hash": "18a3aa01099fa7ca4a7fb354219889df08fcd76b"
+          }
+        },
+        {
+          "client_id": "424084981071-og371tjms0jr993vrk7fk4lendka82k2.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "424084981071-og371tjms0jr993vrk7fk4lendka82k2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdhBtNlcS5imf3nH6A15kYcgY_5vdQUjw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424084981071-og371tjms0jr993vrk7fk4lendka82k2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
