@@ -22,6 +22,8 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.santamaria.manejogastosmensuales.Adapter.PagerAdapter;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
 import com.santamaria.manejogastosmensuales.R;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RadioButton radioSpanish = null;
 
     PagerAdapter pagerAdapter;
-
+    private AdView mAdView;
     public static SettingsData settingsData;
     Realm realm;
 
@@ -79,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Select the second tab as default one.
         tabLayout.getTabAt(1).select();
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private void loadSettings() {

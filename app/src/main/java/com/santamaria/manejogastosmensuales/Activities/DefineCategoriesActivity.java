@@ -20,6 +20,8 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.santamaria.manejogastosmensuales.Adapter.CategoryDefinedAdapter;
 import com.santamaria.manejogastosmensuales.Domain.CategoryDefined;
 import com.santamaria.manejogastosmensuales.Domain.SettingsData;
@@ -39,6 +41,7 @@ public class DefineCategoriesActivity extends AppCompatActivity
     private Realm realm;
     private SettingsData settingsData;
     private int selectedColorR = 0;
+    private AdView mAdView;
 
     private final int CREATE_CATEGORY = 1;
     private final int UPDATE_CATEGORY = 2;
@@ -80,6 +83,10 @@ public class DefineCategoriesActivity extends AppCompatActivity
         }
         //set context menu to listview
         registerForContextMenu(listView);
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private void createAlertDialog(final int dialogType, final CategoryDefined categoryDefined) {
