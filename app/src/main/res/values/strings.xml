@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Monthly Management Tracker</string>
+    <string name="app_name">Monthly Expenses Manager</string>
 
     <string name="title_activity_define_categories">Define Categories Activity</string>
     <string name="Category_Detailed_Act_Creation_title">Create new category detail</string>
