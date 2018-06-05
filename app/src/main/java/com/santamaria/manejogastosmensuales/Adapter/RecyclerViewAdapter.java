@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.santamaria.manejogastosmensuales.Activities.MainActivity;
-import com.santamaria.manejogastosmensuales.CategoryDialogFragment;
+import com.santamaria.manejogastosmensuales.Fragments.CategoryDialogFragment;
 import com.santamaria.manejogastosmensuales.Domain.Category;
 import com.santamaria.manejogastosmensuales.Fragments.MainFragment;
 import com.santamaria.manejogastosmensuales.R;

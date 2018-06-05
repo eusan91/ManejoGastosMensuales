@@ -1,4 +1,4 @@
-package com.santamaria.manejogastosmensuales;
+package com.santamaria.manejogastosmensuales.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,6 +20,7 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.santamaria.manejogastosmensuales.Domain.Category;
+import com.santamaria.manejogastosmensuales.R;
 
 /**
  * Created by Santamaria on 12/04/2017.

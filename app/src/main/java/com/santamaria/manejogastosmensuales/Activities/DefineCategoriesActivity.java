@@ -151,7 +151,6 @@ public class DefineCategoriesActivity extends AppCompatActivity
                 .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
                     public void onColorSelected(int selectedColor) {
-                        //Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setPositiveButton("ok", new ColorPickerClickListener() {
