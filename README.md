@@ -1,5 +1,5 @@
 # ManejoGastosMensuales is an Android app
-It let you take control over your mensual expenses by category of expenses.
+It let you take control over your monthly expenses by category of expenses.
 <br>It has around 1000 active users and 3500 downloads<br>
 -Work in progress... Missing to integrate MVVM & Styles
 <br><br>
